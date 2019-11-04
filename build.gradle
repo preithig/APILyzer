@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.1.7.RELEASE'
+}
+
+group 'org.softwareag.techinterrupt'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://repo.spring.io/libs-milestone"
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.data:spring-data-elasticsearch:3.2.0.RC2'
+    implementation 'org.springframework:spring-context:5.1.6.RELEASE'
+    implementation 'org.springframework:spring-context-support:5.1.6.RELEASE'
+    implementation 'org.springframework.data:spring-data-commons:2.1.6.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-autoconfigure:2.1.7.RELEASE'
+    implementation 'org.springframework:spring-web:5.1.6.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.1.7.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.1.7.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+    implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:6.8.1'
+    implementation 'org.elasticsearch:elasticsearch:6.8.1'
+
+}
