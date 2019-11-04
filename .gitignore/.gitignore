@@ -2,3 +2,5 @@
 *.gradle
 *.iml
 *.class
+.idea
+.gradle
