@@ -1,7 +1,9 @@
 package com.softwareag.apilyzer.endpoints;
 
+import com.itextpdf.text.DocumentException;
 import com.softwareag.apilyzer.manager.ApilyzerManager;
 import com.softwareag.apilyzer.model.EvaluationResult;
+import com.softwareag.apilyzer.report.APILyzerReport;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,6 +53,18 @@ public class ApilyzerController {
   @PostMapping("/issue/{id}/fix")
   public void fix() {
 
+  }
+
+  @GetMapping("{id}/report")
+  public ResponseEntity generateReport(@PathVariable String id) {
+    //Need to get the evaluation result based on the id
+    EvaluationResult result = new EvaluationResult();
+    try {
+      APILyzerReport report = new APILyzerReport(result.getCategories());
+    } catch (DocumentException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 
 }

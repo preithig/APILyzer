@@ -1,12 +1,14 @@
 package com.softwareag.apilyzer.model;
 
+import java.util.List;
+
 public class Category {
 
   private String name;
 
   private int score;
 
-  private SubCategory[] subCategory;
+  private List<SubCategory> subCategory;
 
   public String getName() {
     return name;
@@ -24,11 +26,11 @@ public class Category {
     this.score = score;
   }
 
-  public SubCategory[] getSubCategory() {
+  public List<SubCategory> getSubCategory() {
     return subCategory;
   }
 
-  public void setSubCategory(SubCategory[] subCategory) {
+  public void setSubCategory(List<SubCategory> subCategory) {
     this.subCategory = subCategory;
   }
 }
