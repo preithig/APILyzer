@@ -37,25 +37,6 @@ public abstract class MissingDescriptionRule implements IRuleSpecification {
     return SeverityEnum.LOW;
   }
 
-  @Override
-  public java.lang.String getSummary() {
-    return null;
-  }
-
-  @Override
-  public String getDescription() {
-    return null;
-  }
-
-  @Override
-  public String getRemedy() {
-    return null;
-  }
-
-  @Override
-  public String getErrorInfo() {
-    return null;
-  }
 
   public abstract List<Issue> executeRule(OpenAPI api);
 

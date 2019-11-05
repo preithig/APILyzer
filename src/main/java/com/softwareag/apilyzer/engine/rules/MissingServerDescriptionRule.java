@@ -27,4 +27,31 @@ public class MissingServerDescriptionRule extends MissingDescriptionRule {
 
     return null;
   }
+
+  @Override
+  public String getRuleName() {
+    return "Missing Description in Server";
+  }
+
+  @Override
+  public java.lang.String getSummary() {
+    return null;
+  }
+
+  @Override
+  public String getDescription() {
+    return null;
+  }
+
+  @Override
+  public String getRemedy() {
+    return null;
+  }
+
+  @Override
+  public String getErrorInfo() {
+    return null;
+  }
+
+
 }
