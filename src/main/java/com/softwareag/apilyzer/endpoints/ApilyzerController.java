@@ -105,7 +105,7 @@ public class ApilyzerController {
     Category category = new Category();
     category.setName("API Standard");
     category.setScore(70);
-    category.setSubCategory(subCategoryList);
+    category.setSubCategories(subCategoryList);
 
     List<Category> categoryList = new ArrayList<>();
     categoryList.add(category);
