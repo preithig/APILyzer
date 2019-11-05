@@ -9,7 +9,7 @@ import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 @Configuration
-@EnableElasticsearchRepositories(basePackages = {"org.softwareag.techinterrupt.apilyzer"})
+@EnableElasticsearchRepositories(basePackages = {"com.softwareag.apilyzer"})
 public class StartupConfiguration {
 
 
