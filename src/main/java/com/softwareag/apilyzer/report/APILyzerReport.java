@@ -9,8 +9,6 @@ import com.softwareag.apilyzer.model.Issue;
 import com.softwareag.apilyzer.model.SubCategory;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -39,8 +37,8 @@ public class APILyzerReport {
     this.b = new ByteArrayOutputStream();
     doc = new Document();
     try {
-      PdfWriter.getInstance(doc, new FileOutputStream("Apilyzer.pdf"));
-    } catch (DocumentException | FileNotFoundException e) {
+      PdfWriter.getInstance(doc, b);
+    } catch (DocumentException e) {
       e.printStackTrace();
       throw new RuntimeException(e);
     }
