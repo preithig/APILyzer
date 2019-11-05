@@ -12,6 +12,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class APILyzerReport {
@@ -22,9 +24,9 @@ public class APILyzerReport {
   private static Font categoryFont = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
   private static Font fontBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
   private static Font subCategoryFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC);
-  private Category[] categories;
+  private List<Category> categories;
 
-  private APILyzerReport(Category[] categories) throws DocumentException {
+  public APILyzerReport(List<Category> categories) throws DocumentException {
     this.categories = categories;
     init();
     addMetaData();
@@ -59,26 +61,35 @@ public class APILyzerReport {
     Issue[] issueArray2 = new Issue[1];
     issueArray2[0] = issue2;
 
+
+    List<Issue> issuesList = new ArrayList<>();
+    issuesList.add(issue);
+    issuesList.add(issue1);
+
+    List<Issue> issuesList1 = new ArrayList<>();
+    issuesList1.add(issue2);
+
     SubCategory subCategory = new SubCategory();
     subCategory.setName("Parameters");
-    subCategory.setIssues(issueArray1);
+    subCategory.setIssues(issuesList);
 
     SubCategory subCategory1 = new SubCategory();
     subCategory1.setName("Response Definition");
-    subCategory1.setIssues(issueArray2);
+    subCategory1.setIssues(issuesList1);
 
-    SubCategory[] subCategoryArray = new SubCategory[2];
-    subCategoryArray[0] = subCategory;
-    subCategoryArray[1] = subCategory1;
+    List<SubCategory> subCategoryList = new ArrayList<>();
+    subCategoryList.add(subCategory);
+    subCategoryList.add(subCategory1);
 
     Category category = new Category();
     category.setName("API Standard");
     category.setScore(70);
-    category.setSubCategory(subCategoryArray);
+    category.setSubCategory(subCategoryList);
 
-    Category[] categories = new Category[]{category};
+    List<Category> categoryList = new ArrayList<>();
+    categoryList.add(category);
 
-    APILyzerReport apiLyzerReport = new APILyzerReport(categories);
+    APILyzerReport apiLyzerReport = new APILyzerReport(categoryList);
 
   }
 
@@ -99,7 +110,17 @@ public class APILyzerReport {
     doc.addCreationDate();
   }
 
-  public void add(Element e) {
+  public byte[] export() {
+    try {
+      byte[] bytes = b.toByteArray();
+      b.close();
+      return bytes;
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private void add(Element e) {
     try {
       doc.add(e);
     } catch (DocumentException ex) {
@@ -151,14 +172,14 @@ public class APILyzerReport {
 
   private void write() throws DocumentException {
     firstPage();
-    for (int cIndex = 0; cIndex < categories.length; cIndex++) {
-      Category category = this.categories[cIndex];
+    for (int cIndex = 0; cIndex < categories.size(); cIndex++) {
+      Category category = this.categories.get(cIndex);
       Phrase phrase = new Phrase(category.getName(), categoryFont);
       doc.add(phrase);
       doc.add(Chunk.NEWLINE);
       doc.add(Chunk.NEWLINE);
-      for (int sc_Index = 0; sc_Index < category.getSubCategory().length; sc_Index++) {
-        SubCategory subCategory = category.getSubCategory()[sc_Index];
+      for (int sc_Index = 0; sc_Index < category.getSubCategory().size(); sc_Index++) {
+        SubCategory subCategory = category.getSubCategory().get(sc_Index);
         phrase = new Phrase(subCategory.getName(), subCategoryFont);
         doc.add(phrase);
         createTable(subCategory.getIssues());
@@ -168,7 +189,8 @@ public class APILyzerReport {
 
   }
 
-  private void createTable(Issue[] issues) {
+
+  private void createTable(List<Issue> issues) {
     PdfPTable table = new PdfPTable(new float[]{1, 2, 3, 1});
     table.setHorizontalAlignment(Element.ALIGN_LEFT);
     table.setWidthPercentage(100);

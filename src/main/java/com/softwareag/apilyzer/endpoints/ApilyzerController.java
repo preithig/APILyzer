@@ -6,7 +6,9 @@ import com.softwareag.apilyzer.model.EvaluationResult;
 import com.softwareag.apilyzer.report.APILyzerReport;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,7 +53,10 @@ public class ApilyzerController {
   }
 
   @PostMapping("/issue/{id}/fix")
-  public void fix() {
+  public ResponseEntity<EvaluationResult> fix(String value) {
+
+    EvaluationResult evaluationResult = manager.fix(value);
+    return new ResponseEntity<>(evaluationResult, HttpStatus.OK);
 
   }
 
@@ -61,6 +66,12 @@ public class ApilyzerController {
     EvaluationResult result = new EvaluationResult();
     try {
       APILyzerReport report = new APILyzerReport(result.getCategories());
+      byte[] content = report.export();
+      return ResponseEntity.ok()
+          .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Api_Analysis" + result.getApiName() + ".pdf")
+          .contentLength(content.length)
+          .contentType(MediaType.parseMediaType("application/octet-stream"))
+          .body(content);
     } catch (DocumentException e) {
       e.printStackTrace();
     }

@@ -38,4 +38,8 @@ public class ApilyzerManager {
   public List<EvaluationResult> history() {
     return evaluationService.history();
   }
+
+  public EvaluationResult fix(String value) {
+    return null;
+  }
 }
