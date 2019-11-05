@@ -1,10 +1,12 @@
 package com.softwareag.apilyzer.model;
 
+import java.util.List;
+
 public class SubCategory {
 
   private String name;
 
-  private Issues[] issues;
+  private List<Issues> issues;
 
   public String getName() {
     return name;
@@ -14,11 +16,11 @@ public class SubCategory {
     this.name = name;
   }
 
-  public Issues[] getIssues() {
+  public List<Issues> getIssues() {
     return issues;
   }
 
-  public void setIssues(Issues[] issues) {
+  public void setIssues(List<Issues> issues) {
     this.issues = issues;
   }
 }
