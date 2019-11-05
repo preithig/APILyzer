@@ -107,7 +107,7 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
         i.setSeverity(rule.getSeverity().name());
         i.setSummary(rule.getSummary());
         i.setRemedy(rule.getRemedy());
-        i.setContext(rule.getContext());
+       // i.setContext(rule.getContext());
         return i;
     }
 
