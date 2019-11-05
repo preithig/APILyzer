@@ -10,6 +10,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public abstract class MissingDescriptionRule implements IRuleSpecification {
 
@@ -37,7 +38,7 @@ public abstract class MissingDescriptionRule implements IRuleSpecification {
   }
 
   @Override
-  public String getSummary() {
+  public java.lang.String getSummary() {
     return null;
   }
 
@@ -56,15 +57,15 @@ public abstract class MissingDescriptionRule implements IRuleSpecification {
     return null;
   }
 
-  public abstract Issue executeRule(OpenAPI api);
+  public abstract List<Issue> executeRule(OpenAPI api);
 
   @Override
   public void execute(OpenAPI openAPI) {
 
     for (MissingDescriptionRule rule : list) {
-      Issue issue = rule.executeRule(openAPI);
-      if (issue != null) {
-        issues.add(issue);
+      List<Issue> issues = rule.executeRule(openAPI);
+      if (issues != null) {
+        issues.addAll(issues);
       }
     }
 
@@ -84,4 +85,18 @@ public abstract class MissingDescriptionRule implements IRuleSpecification {
   public int getSuccessCount() {
     return 0;
   }
+
+
+  protected Issue createIssue(Map<String, String> context) {
+    Issue issue = new Issue();
+    issue.setDescription(getDescription());
+    issue.setErrorInfo(getErrorInfo());
+    issue.setName(getRuleName());
+    issue.setRemedy(getRemedy());
+    issue.setSeverity(getSeverity().name());
+    issue.setSummary(getSummary());
+    issue.setContext(context);
+    return issue;
+  }
+
 }

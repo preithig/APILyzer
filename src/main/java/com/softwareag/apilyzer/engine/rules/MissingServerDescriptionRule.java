@@ -5,16 +5,26 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.servers.Server;
 import org.elasticsearch.common.Strings;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MissingServerDescriptionRule extends MissingDescriptionRule {
-  public Issue executeRule(OpenAPI api) {
+  public List<Issue> executeRule(OpenAPI api) {
     if (Objects.nonNull(api.getServers())) {
+      List<Issue> issues = new ArrayList<>();
       List<Server> serverWithMissingDesc = api.getServers().stream().filter(server -> Strings.isNullOrEmpty(server.getDescription())).collect(Collectors.toList());
-
+      for (Server server : serverWithMissingDesc) {
+        issues.add(createIssue(buildContext(api)));
+      }
     }
+    return null;
+  }
+
+  private Map<String, String> buildContext(OpenAPI api) {
+
     return null;
   }
 }
