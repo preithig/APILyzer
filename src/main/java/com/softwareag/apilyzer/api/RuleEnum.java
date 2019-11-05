@@ -1,8 +1,8 @@
 package com.softwareag.apilyzer.api;
 
 public enum RuleEnum {
-  MISSING_INFO_DESC("MISSING_INFO_DESC", "Description is missing in the Info section", "Description is missing in the Info section", "To fix this issue, please give a value to the  description field in the Info section");
-
+  MISSING_INFO_DESC("MISSING_INFO_DESC", "Description is missing in the Info section", "Description is missing in the Info section", "To fix this issue, please give a value to the  description field in the Info section"),
+  MISSING_SERVER_DESC("MISSING_SERVER_DESC", "Description is missing in the Server section", "Description is missing in the Server section", "To fix this issue, please give a value to the  description field in the Server section");
   private String rulename, summary, description, remedy;
 
 

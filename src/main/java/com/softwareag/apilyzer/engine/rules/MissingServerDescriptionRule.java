@@ -1,51 +1,51 @@
 package com.softwareag.apilyzer.engine.rules;
 
-import com.softwareag.apilyzer.model.Issue;
+import com.softwareag.apilyzer.api.RuleEnum;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.servers.Server;
 import org.elasticsearch.common.Strings;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MissingServerDescriptionRule extends MissingDescriptionRule {
-  public List<Issue> executeRule(OpenAPI api) {
+  public void executeRule(OpenAPI api) {
     if (Objects.nonNull(api.getServers())) {
-      List<Issue> issues = new ArrayList<>();
       List<Server> serverWithMissingDesc = api.getServers().stream().filter(server -> Strings.isNullOrEmpty(server.getDescription())).collect(Collectors.toList());
       for (Server server : serverWithMissingDesc) {
-        issues.add(createIssue(buildContext(api)));
+        issues.add(createIssue(buildContext(server)));
       }
     }
-    return null;
   }
 
-  private Map<String, String> buildContext(OpenAPI api) {
-
-    return null;
+  private Map<String, String> buildContext(Server server) {
+    Map<String, String> context = new HashMap<>();
+    context.put("rulename", RuleEnum.MISSING_SERVER_DESC.name());
+    context.put("rulepath", server.getUrl());
+    return context;
   }
 
   @Override
   public String getRuleName() {
-    return "Missing Description in Server";
+    return RuleEnum.MISSING_SERVER_DESC.getRulename();
   }
 
   @Override
   public java.lang.String getSummary() {
-    return null;
+    return RuleEnum.MISSING_SERVER_DESC.getSummary();
   }
 
   @Override
   public String getDescription() {
-    return null;
+    return RuleEnum.MISSING_SERVER_DESC.getDescription();
   }
 
   @Override
   public String getRemedy() {
-    return null;
+    return RuleEnum.MISSING_SERVER_DESC.getRemedy();
   }
 
   @Override

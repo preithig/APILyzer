@@ -1,31 +1,27 @@
 package com.softwareag.apilyzer.engine.rules;
 
 import com.softwareag.apilyzer.api.RuleEnum;
-import com.softwareag.apilyzer.model.Issue;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import org.elasticsearch.common.Strings;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MissingInfoDescriptionRule extends MissingDescriptionRule {
 
-  public List<Issue> executeRule(OpenAPI api) {
-
+  public void executeRule(OpenAPI api) {
     Info info = api.getInfo();
     if (Strings.isNullOrEmpty(info.getDescription())) {
-      createIssue(buildContext(api));
+      issues.add(createIssue(buildContext()));
     }
-    return null;
   }
 
-  private Map<String, String> buildContext(OpenAPI api) {
+  private Map<String, String> buildContext() {
 
     Map<String, String> context = new HashMap<>();
-
-    return null;
+    context.put("rulename", RuleEnum.MISSING_INFO_DESC.name());
+    return context;
   }
 
   @Override

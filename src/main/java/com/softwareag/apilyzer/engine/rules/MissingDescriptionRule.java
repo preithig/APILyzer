@@ -38,16 +38,12 @@ public abstract class MissingDescriptionRule implements IRuleSpecification {
   }
 
 
-  public abstract List<Issue> executeRule(OpenAPI api);
+  public abstract void executeRule(OpenAPI api);
 
   @Override
   public void execute(OpenAPI openAPI) {
-
     for (MissingDescriptionRule rule : list) {
-      List<Issue> issues = rule.executeRule(openAPI);
-      if (issues != null) {
-        issues.addAll(issues);
-      }
+      rule.executeRule(openAPI);
     }
 
   }
