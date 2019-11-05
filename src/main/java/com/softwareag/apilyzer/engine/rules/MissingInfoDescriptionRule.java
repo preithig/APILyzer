@@ -14,6 +14,10 @@ public class MissingInfoDescriptionRule extends MissingDescriptionRule {
     Info info = api.getInfo();
     if (Strings.isNullOrEmpty(info.getDescription())) {
       issues.add(createIssue(buildContext()));
+      totalCount = 0;
+    } else {
+      totalCount = 1;
+      successCount = 1;
     }
   }
 
@@ -23,6 +27,7 @@ public class MissingInfoDescriptionRule extends MissingDescriptionRule {
     context.put("rulename", RuleEnum.MISSING_INFO_DESC.name());
     return context;
   }
+
 
   @Override
   public String getRuleName() {

@@ -16,6 +16,8 @@ public abstract class MissingDescriptionRule implements IRuleSpecification {
 
   List<MissingDescriptionRule> list = Arrays.asList(new MissingInfoDescriptionRule(), new MissingServerDescriptionRule());
   List<Issue> issues = Collections.emptyList();
+  int totalCount = 0;
+  int successCount = 0;
 
   @Override
   public String getRuleName() {
@@ -49,11 +51,6 @@ public abstract class MissingDescriptionRule implements IRuleSpecification {
   }
 
   @Override
-  public List<Issue> getIssues() {
-    return issues;
-  }
-
-  @Override
   public int getTotalCount() {
     return 0;
   }
@@ -63,6 +60,11 @@ public abstract class MissingDescriptionRule implements IRuleSpecification {
     return 0;
   }
 
+
+  @Override
+  public List<Issue> getIssues() {
+    return issues;
+  }
 
   protected Issue createIssue(Map<String, String> context) {
     Issue issue = new Issue();

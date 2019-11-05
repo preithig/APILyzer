@@ -14,7 +14,9 @@ import java.util.stream.Collectors;
 public class MissingServerDescriptionRule extends MissingDescriptionRule {
   public void executeRule(OpenAPI api) {
     if (Objects.nonNull(api.getServers())) {
+      totalCount = api.getServers().size();
       List<Server> serverWithMissingDesc = api.getServers().stream().filter(server -> Strings.isNullOrEmpty(server.getDescription())).collect(Collectors.toList());
+      successCount = totalCount - serverWithMissingDesc.size();
       for (Server server : serverWithMissingDesc) {
         issues.add(createIssue(buildContext(server)));
       }
