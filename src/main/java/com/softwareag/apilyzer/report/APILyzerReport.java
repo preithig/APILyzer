@@ -11,11 +11,14 @@ import com.softwareag.apilyzer.model.SubCategory;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Objects;
 
 public class APILyzerReport {
 
   private Document doc;
   private ByteArrayOutputStream b;
+  private static Font reportTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 20, Font.BOLD);
   private static Font categoryFont = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
   private static Font fontBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
   private static Font subCategoryFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC);
@@ -104,7 +107,50 @@ public class APILyzerReport {
     }
   }
 
+  private void firstPage() {
+    PdfPTable table = new PdfPTable(2);
+    try {
+      table.setWidthPercentage(50);
+      float sideLength = PageSize.A4.rotate().getWidth() * 1 / 2;
+      table.setWidths(new float[]{sideLength * 5 / 10, sideLength * 5 / 10});
+      table.addCell(Objects.requireNonNull(getLogo()));
+      table.addCell(getTitle());
+      table.setHorizontalAlignment(Element.ALIGN_CENTER);
+      doc.add(table);
+      doc.add(Chunk.NEXTPAGE);
+    } catch (DocumentException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private PdfPCell getLogo() {
+    try {
+      Image image = Image.getInstance("SAG.png");
+      PdfPCell cell = new PdfPCell(image, true);
+      cell.setBorder(Rectangle.NO_BORDER);
+      cell.setPaddingTop(PageSize.A4.rotate().getHeight() / 4);
+      cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+      return cell;
+    } catch (BadElementException | IOException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  private PdfPCell getTitle() {
+    Paragraph paragraph = new Paragraph("API Analysis Report", reportTitleFont);
+    paragraph.setSpacingBefore(8);
+    paragraph.setSpacingAfter(8);
+    PdfPCell cell = new PdfPCell(paragraph);
+    cell.setBorder(Rectangle.NO_BORDER);
+    cell.setPaddingTop(PageSize.A4.rotate().getHeight() / 4);
+    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+    return cell;
+  }
+
   private void write() throws DocumentException {
+    firstPage();
     for (int cIndex = 0; cIndex < categories.length; cIndex++) {
       Category category = this.categories[cIndex];
       Phrase phrase = new Phrase(category.getName(), categoryFont);
