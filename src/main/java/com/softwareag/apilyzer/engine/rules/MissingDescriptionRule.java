@@ -1,4 +1,4 @@
-package com.softwareag.apilyzer.engine;
+package com.softwareag.apilyzer.engine.rules;
 
 import com.softwareag.apilyzer.api.CategoryEnum;
 import com.softwareag.apilyzer.api.IRuleSpecification;
@@ -9,7 +9,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 
 import java.util.List;
 
-public class SecuritySchemeRuleSpecification implements IRuleSpecification {
+public class MissingDescriptionRule implements IRuleSpecification {
   @Override
   public String getRuleName() {
     return null;
@@ -17,12 +17,12 @@ public class SecuritySchemeRuleSpecification implements IRuleSpecification {
 
   @Override
   public CategoryEnum getCategoryName() {
-    return CategoryEnum.SECURITY_STANDARDS;
+    return CategoryEnum.EASE_OF_USE;
   }
 
   @Override
   public SubCategoryEnum getSubCategoryName() {
-    return SubCategoryEnum.SECURITY_SCHEMES;
+    return SubCategoryEnum.MISSING_FIELDS;
   }
 
   @Override
@@ -52,14 +52,11 @@ public class SecuritySchemeRuleSpecification implements IRuleSpecification {
 
   @Override
   public void execute(OpenAPI api) {
+
+
+
   }
 
-  @Override
-  public boolean fix(OpenAPI openAPI, Object data) {
-
-
-    return false;
-  }
 
   @Override
   public List<Issue> getIssues() {
