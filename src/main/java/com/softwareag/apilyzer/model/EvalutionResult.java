@@ -8,6 +8,8 @@ public class EvalutionResult {
 
     private String id;
 
+    private int score;
+
     private List<Category> categories;
 
     public EvalutionResult() {
@@ -35,5 +37,13 @@ public class EvalutionResult {
 
     public void setCategories(List<Category> categories) {
         this.categories = categories;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }
