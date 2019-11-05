@@ -1,8 +1,9 @@
 package com.softwareag.apilyzer.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class EvalutionResult {
+public class EvaluationResult {
 
     private String apiName;
 
@@ -10,9 +11,9 @@ public class EvalutionResult {
 
     private int score;
 
-    private List<Category> categories;
+    private List<Category> categories = new ArrayList<>();
 
-    public EvalutionResult() {
+    public EvaluationResult() {
     }
 
     public String getApiName() {

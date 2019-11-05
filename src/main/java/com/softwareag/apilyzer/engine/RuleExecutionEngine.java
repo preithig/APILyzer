@@ -2,7 +2,7 @@ package com.softwareag.apilyzer.engine;
 
 import com.softwareag.apilyzer.api.IRuleExecutionEngine;
 import com.softwareag.apilyzer.api.IRuleSpecification;
-import com.softwareag.apilyzer.model.EvalutionResult;
+import com.softwareag.apilyzer.model.EvaluationResult;
 import io.swagger.v3.oas.models.OpenAPI;
 
 import java.util.Collections;
@@ -16,9 +16,9 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
     }
 
     @Override
-    public EvalutionResult evaluate(OpenAPI openAPI) {
+    public EvaluationResult evaluate(OpenAPI openAPI) {
 
-        EvalutionResult result = new EvalutionResult();
+        EvaluationResult result = new EvaluationResult();
 
         addBasicInfo(result, openAPI);
 
@@ -29,15 +29,18 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
         return result;
     }
 
-    private void evaluateAPIScore(EvalutionResult result, OpenAPI openAPI) {
+    private void evaluateAPIScore(EvaluationResult result, OpenAPI openAPI) {
+
+        int sum = 0;
+        result
 
     }
 
-    private void evaluateRuleSpecification(EvalutionResult result, OpenAPI openAPI) {
+    private void evaluateRuleSpecification(EvaluationResult result, OpenAPI openAPI) {
 
     }
 
-    private void addBasicInfo(EvalutionResult result, OpenAPI openAPI) {
+    private void addBasicInfo(EvaluationResult result, OpenAPI openAPI) {
         result.setApiName(openAPI.getInfo().getTitle());
     }
 }
