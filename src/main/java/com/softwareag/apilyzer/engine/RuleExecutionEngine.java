@@ -41,7 +41,13 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
     }
 
     private void calculateCategoryScore(EvaluationResult result) {
+        for (Category category : result.getCategories()) {
+            int max = categoryMaxScoreMap.get(category.getName());
+            int actual = categoryActualScoreMap.get(category.getName());
 
+            DecimalFormat dec = new DecimalFormat("#0.00");
+            category.setScore(Integer.valueOf(dec.format(actual/max))*100);
+        }
     }
 
     private void calculateAPIScore(EvaluationResult result) {
@@ -65,7 +71,8 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
     }
 
     private void updateResult(IRuleSpecification rule, EvaluationResult result) {
-        Optional<Category> any = result.getCategories().stream().filter(c -> c.getName().equals(rule.getCategoryName().name())).findAny();
+        Optional<Category> any = result.getCategories().stream()
+                .filter(c -> c.getName().equals(rule.getCategoryName().name())).findAny();
         if(!any.isPresent()) {
             Category c = new Category();
             c.setName(rule.getCategoryName().name());
