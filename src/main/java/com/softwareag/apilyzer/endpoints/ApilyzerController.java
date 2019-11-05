@@ -57,7 +57,10 @@ public class ApilyzerController {
   }
 
   @PostMapping("/issue/{id}/fix")
-  public void fix() {
+  public ResponseEntity<EvaluationResult> fix(String value) {
+
+    EvaluationResult evaluationResult = manager.fix(value);
+    return new ResponseEntity<>(evaluationResult, HttpStatus.OK);
 
   }
 

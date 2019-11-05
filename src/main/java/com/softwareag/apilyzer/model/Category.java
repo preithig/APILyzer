@@ -1,5 +1,6 @@
 package com.softwareag.apilyzer.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Category {
@@ -8,7 +9,10 @@ public class Category {
 
   private int score;
 
-  private List<SubCategory> subCategory;
+  private List<SubCategory> subCategory = new ArrayList<>();
+
+  public Category() {
+  }
 
   public String getName() {
     return name;

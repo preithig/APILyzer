@@ -4,14 +4,14 @@ import com.softwareag.apilyzer.api.CategoryEnum;
 import com.softwareag.apilyzer.api.IRuleExecutionEngine;
 import com.softwareag.apilyzer.api.IRuleSpecification;
 import com.softwareag.apilyzer.api.SeverityEnum;
+import com.softwareag.apilyzer.model.Category;
 import com.softwareag.apilyzer.model.EvaluationResult;
+import com.softwareag.apilyzer.model.Issue;
+import com.softwareag.apilyzer.model.SubCategory;
 import io.swagger.v3.oas.models.OpenAPI;
 
 import java.text.DecimalFormat;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RuleExecutionEngine implements IRuleExecutionEngine {
@@ -31,36 +31,66 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
 
         addBasicInfo(result, openAPI);
 
-        evaluateRuleSpecification(result, openAPI);
+        evaluateRuleSpecification(openAPI, result);
 
-        evaluateAPIScore(result);
+        calculateCategoryScore(result);
+
+        calculateAPIScore(result);
 
         return result;
     }
 
-    private void evaluateAPIScore(EvaluationResult result) {
+    private void calculateCategoryScore(EvaluationResult result) {
+    }
+
+    private void calculateAPIScore(EvaluationResult result) {
         AtomicInteger sum = new AtomicInteger();
         result.getCategories().forEach(c-> sum.addAndGet(c.getScore()));
         DecimalFormat dec = new DecimalFormat("#0.00");
         result.setScore(Integer.valueOf(dec.format(sum.get()/result.getCategories().size()))*100);
     }
 
-    private void evaluateRuleSpecification(EvaluationResult result, OpenAPI openAPI) {
+    private void evaluateRuleSpecification(OpenAPI openAPI, EvaluationResult result) {
         for (IRuleSpecification rule : getAllRules()) {
             boolean passed = rule.execute(openAPI);
             if(passed) {
                 updateMaxScore(rule.getCategoryName(), rule.getSeverity());
-                //updateActualScore(rule.getCategoryName(), rule.getSeverity());
+                updateActualScore(rule.getCategoryName(), rule.getSeverity());
+            } else {
+                updateMaxScore(rule.getCategoryName(), rule.getSeverity());
+                updateResult(rule, result);
             }
         }
     }
 
+    private void updateResult(IRuleSpecification rule, EvaluationResult result) {
+        Optional<Category> any = result.getCategories().stream().filter(c -> c.getName().equals(rule.getCategoryName().name())).findAny();
+        if(!any.isPresent()) {
+            Category c = new Category();
+            c.setName(rule.getCategoryName().name());
+
+            SubCategory s = new SubCategory();
+            s.setName(rule.getSubCategoryName().name());
+            c.getSubCategory().add(s);
+
+            Issue i = new Issue();
+        }
+    }
+
+    private void updateActualScore(CategoryEnum categoryName, SeverityEnum severity) {
+        updateScore(categoryActualScoreMap, categoryName, severity);
+    }
+
     private void updateMaxScore(CategoryEnum categoryName, SeverityEnum severity) {
-        categoryMaxScoreMap.putIfAbsent(categoryName.name(), 0);
-        Integer previousMax = categoryMaxScoreMap.get(categoryName.name());
+        updateScore(categoryMaxScoreMap, categoryName, severity);
+    }
+
+    private void updateScore(Map<String, Integer> map, CategoryEnum categoryName, SeverityEnum severity) {
+        map.putIfAbsent(categoryName.name(), 0);
+        Integer previousMax = map.get(categoryName.name());
 
         int newMax = previousMax + getScoreBySeverity(severity);
-        categoryMaxScoreMap.put(categoryName.name(), newMax);
+        map.put(categoryName.name(), newMax);
     }
 
     private Integer getScoreBySeverity(SeverityEnum severity) {

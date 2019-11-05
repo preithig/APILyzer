@@ -5,14 +5,13 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.softwareag.apilyzer.model.Category;
-import com.softwareag.apilyzer.model.Issues;
+import com.softwareag.apilyzer.model.Issue;
 import com.softwareag.apilyzer.model.SubCategory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -131,14 +130,15 @@ public class APILyzerReport {
 
   }
 
-  private void createTable(List<Issues> issues) {
+
+  private void createTable(List<Issue> issues) {
     PdfPTable table = new PdfPTable(new float[]{1, 2, 3, 1});
     table.setHorizontalAlignment(Element.ALIGN_LEFT);
     table.setWidthPercentage(100);
 
     writeHeader(table);
 
-    for (Issues issue : issues) {
+    for (Issue issue : issues) {
       table.addCell(issue.getSummary());
       table.addCell(issue.getDescription());
       table.addCell(issue.getRemedy());

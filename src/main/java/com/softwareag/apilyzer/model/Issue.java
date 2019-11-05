@@ -1,6 +1,8 @@
 package com.softwareag.apilyzer.model;
 
-public class Issues {
+public class Issue {
+
+  private String name;
 
   private String summary;
 
@@ -9,6 +11,9 @@ public class Issues {
   private String remedy;
 
   private String severity;
+
+  public Issue() {
+  }
 
   public String getSummary() {
     return summary;
