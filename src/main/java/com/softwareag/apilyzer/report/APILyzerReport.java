@@ -35,56 +35,6 @@ public class APILyzerReport {
     doc.close();
   }
 
-  public static void main(String[] args) throws DocumentException {
-    Issues issue = new Issues();
-    issue.setSummary("Numeric parameter 'limit' of type 'integer' has no maximum defined");
-    issue.setDescription("Some numeric parameters in your API do not have the maximum value specified.");
-    issue.setRemedy("Set both the minimum and maximum values for numeric parameters to limit the accepted values to the range that works for your application.");
-    issue.setSeverity("Low");
-
-    Issues issue1 = new Issues();
-    issue1.setSummary("String parameter 'petId' has no pattern defined");
-    issue1.setDescription("Some string parameters in your API do not define any pattern for the accepted strings. This means that they do not limit the values that get passed to the API.");
-    issue1.setRemedy("Set a well-defined regular expression in the pattern field of string parameters. This ensures that only strings matching the set pattern get passed to your API.");
-    issue1.setSeverity("Low");
-
-    Issues issue2 = new Issues();
-    issue2.setSummary("Response that should contain a body has no schema defined");
-    issue2.setDescription("You have not defined any schemas for responses that should contain a body.");
-    issue2.setRemedy("Define schemas for all responses that should have a body.Alternatively, if you do not want to include a body, you can change the HTTP status code in the response to one that should not have a body.");
-    issue2.setSeverity("High");
-
-    List<Issues> issuesList = new ArrayList<>();
-    issuesList.add(issue);
-    issuesList.add(issue1);
-
-    List<Issues> issuesList1 = new ArrayList<>();
-    issuesList1.add(issue2);
-
-    SubCategory subCategory = new SubCategory();
-    subCategory.setName("Parameters");
-    subCategory.setIssues(issuesList);
-
-    SubCategory subCategory1 = new SubCategory();
-    subCategory1.setName("Response Definition");
-    subCategory1.setIssues(issuesList1);
-
-    List<SubCategory> subCategoryList = new ArrayList<>();
-    subCategoryList.add(subCategory);
-    subCategoryList.add(subCategory1);
-
-    Category category = new Category();
-    category.setName("API Standard");
-    category.setScore(70);
-    category.setSubCategory(subCategoryList);
-
-    List<Category> categoryList = new ArrayList<>();
-    categoryList.add(category);
-
-    APILyzerReport apiLyzerReport = new APILyzerReport(categoryList);
-
-  }
-
   private void init() {
     this.b = new ByteArrayOutputStream();
     doc = new Document();
