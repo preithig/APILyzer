@@ -53,7 +53,8 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
 
     private void evaluateRuleSpecification(OpenAPI openAPI, EvaluationResult result) {
         for (IRuleSpecification rule : getAllRules()) {
-            boolean passed = rule.execute(openAPI);
+            boolean passed =false;
+            rule.execute(openAPI);
             if(passed) {
                 updateMaxScore(rule.getCategoryName(), rule.getSeverity());
                 updateActualScore(rule.getCategoryName(), rule.getSeverity());

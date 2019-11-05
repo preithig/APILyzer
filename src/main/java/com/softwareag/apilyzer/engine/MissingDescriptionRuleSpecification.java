@@ -4,9 +4,10 @@ import com.softwareag.apilyzer.api.CategoryEnum;
 import com.softwareag.apilyzer.api.IRuleSpecification;
 import com.softwareag.apilyzer.api.SeverityEnum;
 import com.softwareag.apilyzer.api.SubCategoryEnum;
+import com.softwareag.apilyzer.model.Issue;
 import io.swagger.v3.oas.models.OpenAPI;
 
-import java.util.Map;
+import java.util.List;
 
 public class MissingDescriptionRuleSpecification implements IRuleSpecification {
   @Override
@@ -16,17 +17,17 @@ public class MissingDescriptionRuleSpecification implements IRuleSpecification {
 
   @Override
   public CategoryEnum getCategoryName() {
-    return null;
+    return CategoryEnum.EASE_OF_USE;
   }
 
   @Override
   public SubCategoryEnum getSubCategoryName() {
-    return null;
+    return SubCategoryEnum.MISSING_FIELDS;
   }
 
   @Override
   public SeverityEnum getSeverity() {
-    return null;
+    return SeverityEnum.LOW;
   }
 
   @Override
@@ -50,17 +51,28 @@ public class MissingDescriptionRuleSpecification implements IRuleSpecification {
   }
 
   @Override
-  public Map<String, String> getContext() {
-    return null;
-  }
-
-  @Override
-  public boolean execute(OpenAPI api) {
-    return false;
+  public void execute(OpenAPI api) {
   }
 
   @Override
   public boolean fix(OpenAPI openAPI, Object data) {
+
+
     return false;
+  }
+
+  @Override
+  public List<Issue> getIssues() {
+    return null;
+  }
+
+  @Override
+  public int getTotalCount() {
+    return 0;
+  }
+
+  @Override
+  public int getSuccessCount() {
+    return 0;
   }
 }
