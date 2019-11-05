@@ -84,7 +84,7 @@ public class APILyzerReport {
     Category category = new Category();
     category.setName("API Standard");
     category.setScore(70);
-    category.setSubCategory(subCategoryList);
+    category.setSubCategories(subCategoryList);
 
     List<Category> categoryList = new ArrayList<>();
     categoryList.add(category);
@@ -178,8 +178,8 @@ public class APILyzerReport {
       doc.add(phrase);
       doc.add(Chunk.NEWLINE);
       doc.add(Chunk.NEWLINE);
-      for (int sc_Index = 0; sc_Index < category.getSubCategory().size(); sc_Index++) {
-        SubCategory subCategory = category.getSubCategory().get(sc_Index);
+      for (int sc_Index = 0; sc_Index < category.getSubCategories().size(); sc_Index++) {
+        SubCategory subCategory = category.getSubCategories().get(sc_Index);
         phrase = new Phrase(subCategory.getName(), subCategoryFont);
         doc.add(phrase);
         createTable(subCategory.getIssues());

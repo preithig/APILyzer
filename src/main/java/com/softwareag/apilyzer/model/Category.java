@@ -9,7 +9,7 @@ public class Category {
 
   private int score;
 
-  private List<SubCategory> subCategory = new ArrayList<>();
+  private List<SubCategory> subCategories = new ArrayList<>();
 
   public Category() {
   }
@@ -30,11 +30,11 @@ public class Category {
     this.score = score;
   }
 
-  public List<SubCategory> getSubCategory() {
-    return subCategory;
+  public List<SubCategory> getSubCategories() {
+    return subCategories;
   }
 
-  public void setSubCategory(List<SubCategory> subCategory) {
-    this.subCategory = subCategory;
+  public void setSubCategories(List<SubCategory> subCategories) {
+    this.subCategories = subCategories;
   }
 }

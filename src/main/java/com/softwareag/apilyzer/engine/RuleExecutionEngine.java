@@ -41,6 +41,7 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
     }
 
     private void calculateCategoryScore(EvaluationResult result) {
+
     }
 
     private void calculateAPIScore(EvaluationResult result) {
@@ -68,13 +69,45 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
         if(!any.isPresent()) {
             Category c = new Category();
             c.setName(rule.getCategoryName().name());
+            result.getCategories().add(c);
 
-            SubCategory s = new SubCategory();
-            s.setName(rule.getSubCategoryName().name());
-            c.getSubCategory().add(s);
+            SubCategory s = createSubCategory(rule);
+            c.getSubCategories().add(s);
 
-            Issue i = new Issue();
+            Issue i = createIssue(rule);
+            s.getIssues().add(i);
+        } else {
+            Category category = any.get();
+            Optional<SubCategory> scOptional = category.getSubCategories()
+                    .stream().filter(s -> s.getName().equals(rule.getSeverity().name())).findAny();
+            if (scOptional.isPresent()) {
+                SubCategory subCategory = scOptional.get();
+                subCategory.getIssues().add(createIssue(rule));
+            } else {
+                SubCategory s = createSubCategory(rule);
+                category.getSubCategories().add(s);
+                Issue i = createIssue(rule);
+                s.getIssues().add(i);
+            }
         }
+    }
+
+    private SubCategory createSubCategory(IRuleSpecification rule) {
+        SubCategory s = new SubCategory();
+        s.setName(rule.getSubCategoryName().name());
+        return s;
+    }
+
+    private Issue createIssue(IRuleSpecification rule) {
+        Issue i = new Issue();
+        i.setName(rule.getRuleName());
+        i.setDescription(rule.getDescription());
+        i.setErrorInfo(rule.getErrorInfo());
+        i.setSeverity(rule.getSeverity().name());
+        i.setSummary(rule.getSummary());
+        i.setRemedy(rule.getRemedy());
+        i.setContext(rule.getContext());
+        return i;
     }
 
     private void updateActualScore(CategoryEnum categoryName, SeverityEnum severity) {
