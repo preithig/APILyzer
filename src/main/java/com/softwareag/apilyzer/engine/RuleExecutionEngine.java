@@ -6,7 +6,6 @@ import com.softwareag.apilyzer.api.IRuleSpecification;
 import com.softwareag.apilyzer.api.SeverityEnum;
 import com.softwareag.apilyzer.model.Category;
 import com.softwareag.apilyzer.model.EvaluationResult;
-import com.softwareag.apilyzer.model.Issue;
 import com.softwareag.apilyzer.model.SubCategory;
 import io.swagger.v3.oas.models.OpenAPI;
 
@@ -59,13 +58,18 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
 
     private void evaluateRuleSpecification(OpenAPI openAPI, EvaluationResult result) {
         for (IRuleSpecification rule : getAllRules()) {
-            boolean passed =false;
+
             rule.execute(openAPI);
-            if(passed) {
+
+            for(int i=0; i < rule.getTotalCount(); i++) {
                 updateMaxScore(rule.getCategoryName(), rule.getSeverity());
+            }
+
+            for(int i=0; i < rule.getSuccessCount(); i++) {
                 updateActualScore(rule.getCategoryName(), rule.getSeverity());
-            } else {
-                updateMaxScore(rule.getCategoryName(), rule.getSeverity());
+            }
+
+            if(rule.getIssues() != null && !rule.getIssues().isEmpty()) {
                 updateResult(rule, result);
             }
         }
@@ -82,20 +86,18 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
             SubCategory s = createSubCategory(rule);
             c.getSubCategories().add(s);
 
-            Issue i = createIssue(rule);
-            s.getIssues().add(i);
+            s.getIssues().addAll(rule.getIssues());
         } else {
             Category category = any.get();
             Optional<SubCategory> scOptional = category.getSubCategories()
                     .stream().filter(s -> s.getName().equals(rule.getSeverity().name())).findAny();
             if (scOptional.isPresent()) {
                 SubCategory subCategory = scOptional.get();
-                subCategory.getIssues().add(createIssue(rule));
+                subCategory.getIssues().addAll(rule.getIssues());
             } else {
                 SubCategory s = createSubCategory(rule);
                 category.getSubCategories().add(s);
-                Issue i = createIssue(rule);
-                s.getIssues().add(i);
+                s.getIssues().addAll(rule.getIssues());
             }
         }
     }
@@ -104,18 +106,6 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
         SubCategory s = new SubCategory();
         s.setName(rule.getSubCategoryName().name());
         return s;
-    }
-
-    private Issue createIssue(IRuleSpecification rule) {
-        Issue i = new Issue();
-        i.setName(rule.getRuleName());
-        i.setDescription(rule.getDescription());
-        i.setErrorInfo(rule.getErrorInfo());
-        i.setSeverity(rule.getSeverity().name());
-        i.setSummary(rule.getSummary());
-        i.setRemedy(rule.getRemedy());
-       // i.setContext(rule.getContext());
-        return i;
     }
 
     private void updateActualScore(CategoryEnum categoryName, SeverityEnum severity) {
