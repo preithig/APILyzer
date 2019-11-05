@@ -7,9 +7,15 @@ import com.softwareag.apilyzer.api.SubCategoryEnum;
 import com.softwareag.apilyzer.model.Issue;
 import io.swagger.v3.oas.models.OpenAPI;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-public class MissingDescriptionRule implements IRuleSpecification {
+public abstract class MissingDescriptionRule implements IRuleSpecification {
+
+  List<MissingDescriptionRule> list = Arrays.asList(new MissingInfoDescriptionRule(), new MissingServerDescriptionRule());
+  List<Issue> issues = Collections.emptyList();
+
   @Override
   public String getRuleName() {
     return null;
@@ -50,17 +56,23 @@ public class MissingDescriptionRule implements IRuleSpecification {
     return null;
   }
 
+  public abstract Issue executeRule(OpenAPI api);
+
   @Override
-  public void execute(OpenAPI api) {
+  public void execute(OpenAPI openAPI) {
 
-
+    for (MissingDescriptionRule rule : list) {
+      Issue issue = rule.executeRule(openAPI);
+      if (issue != null) {
+        issues.add(issue);
+      }
+    }
 
   }
 
-
   @Override
   public List<Issue> getIssues() {
-    return null;
+    return issues;
   }
 
   @Override
