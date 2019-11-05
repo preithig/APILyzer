@@ -1,26 +1,26 @@
 package com.softwareag.apilyzer.model;
 
-public class RuleSet {
+public class Category {
 
-  private String category;
+  private String name;
 
-  private String score;
+  private int score;
 
   private SubCategory[] subCategory;
 
-  public String getCategory() {
-    return category;
+  public String getName() {
+    return name;
   }
 
-  public void setCategory(String category) {
-    this.category = category;
+  public void setName(String name) {
+    this.name = name;
   }
 
-  public String getScore() {
+  public int getScore() {
     return score;
   }
 
-  public void setScore(String score) {
+  public void setScore(int score) {
     this.score = score;
   }
 

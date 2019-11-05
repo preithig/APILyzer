@@ -5,7 +5,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.softwareag.apilyzer.model.Issues;
-import com.softwareag.apilyzer.model.RuleSet;
+import com.softwareag.apilyzer.model.Category;
 import com.softwareag.apilyzer.model.SubCategory;
 
 import java.io.ByteArrayOutputStream;
@@ -19,10 +19,10 @@ public class APILyzerReport {
   private static Font categoryFont = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
   private static Font fontBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
   private static Font subCategoryFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC);
-  private RuleSet[] ruleSets;
+  private Category[] categories;
 
-  private APILyzerReport(RuleSet[] ruleSets) throws DocumentException {
-    this.ruleSets = ruleSets;
+  private APILyzerReport(Category[] categories) throws DocumentException {
+    this.categories = categories;
     init();
     addMetaData();
     doc.open();
@@ -68,14 +68,14 @@ public class APILyzerReport {
     subCategoryArray[0] = subCategory;
     subCategoryArray[1] = subCategory1;
 
-    RuleSet ruleSet = new RuleSet();
-    ruleSet.setCategory("API Standard");
-    ruleSet.setScore("70");
-    ruleSet.setSubCategory(subCategoryArray);
+    Category category = new Category();
+    category.setName("API Standard");
+    category.setScore(70);
+    category.setSubCategory(subCategoryArray);
 
-    RuleSet[] ruleSets = new RuleSet[]{ruleSet};
+    Category[] categories = new Category[]{category};
 
-    APILyzerReport apiLyzerReport = new APILyzerReport(ruleSets);
+    APILyzerReport apiLyzerReport = new APILyzerReport(categories);
 
   }
 
@@ -105,14 +105,14 @@ public class APILyzerReport {
   }
 
   private void write() throws DocumentException {
-    for (int cIndex = 0; cIndex < ruleSets.length; cIndex++) {
-      RuleSet ruleSet = this.ruleSets[cIndex];
-      Phrase phrase = new Phrase(ruleSet.getCategory(), categoryFont);
+    for (int cIndex = 0; cIndex < categories.length; cIndex++) {
+      Category category = this.categories[cIndex];
+      Phrase phrase = new Phrase(category.getName(), categoryFont);
       doc.add(phrase);
       doc.add(Chunk.NEWLINE);
       doc.add(Chunk.NEWLINE);
-      for (int sc_Index = 0; sc_Index < ruleSet.getSubCategory().length; sc_Index++) {
-        SubCategory subCategory = ruleSet.getSubCategory()[sc_Index];
+      for (int sc_Index = 0; sc_Index < category.getSubCategory().length; sc_Index++) {
+        SubCategory subCategory = category.getSubCategory()[sc_Index];
         phrase = new Phrase(subCategory.getName(), subCategoryFont);
         doc.add(phrase);
         createTable(subCategory.getIssues());
