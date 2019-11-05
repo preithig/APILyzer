@@ -2,6 +2,7 @@ package com.softwareag.apilyzer.api;
 
 public enum SubCategoryEnum {
 
-  MISSING_FIELDS
+  MISSING_FIELDS,
+  SECURITY_SCHEMES
 
 }
