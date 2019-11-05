@@ -1,4 +1,4 @@
-package org.softwareag.techinterrupt.apilyzer.model;
+package com.softwareag.apilyzer.model;
 
 public class Issues {
 
