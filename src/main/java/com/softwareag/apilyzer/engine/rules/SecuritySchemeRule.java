@@ -9,7 +9,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 
 import java.util.List;
 
-public class SecuritySchemeRuleSpecification implements IRuleSpecification {
+public class SecuritySchemeRule implements IRuleSpecification {
   @Override
   public String getRuleName() {
     return null;
@@ -27,7 +27,7 @@ public class SecuritySchemeRuleSpecification implements IRuleSpecification {
 
   @Override
   public SeverityEnum getSeverity() {
-    return SeverityEnum.LOW;
+    return SeverityEnum.HIGH;
   }
 
   @Override
