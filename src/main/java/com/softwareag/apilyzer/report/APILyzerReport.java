@@ -4,15 +4,14 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.softwareag.apilyzer.model.Issue;
 import com.softwareag.apilyzer.model.Category;
+import com.softwareag.apilyzer.model.Issue;
 import com.softwareag.apilyzer.model.SubCategory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,63 +34,6 @@ public class APILyzerReport {
     doc.close();
   }
 
-  public static void main(String[] args) throws DocumentException {
-    Issue issue = new Issue();
-    issue.setSummary("Numeric parameter 'limit' of type 'integer' has no maximum defined");
-    issue.setDescription("Some numeric parameters in your API do not have the maximum value specified.");
-    issue.setRemedy("Set both the minimum and maximum values for numeric parameters to limit the accepted values to the range that works for your application.");
-    issue.setSeverity("Low");
-
-    Issue issue1 = new Issue();
-    issue1.setSummary("String parameter 'petId' has no pattern defined");
-    issue1.setDescription("Some string parameters in your API do not define any pattern for the accepted strings. This means that they do not limit the values that get passed to the API.");
-    issue1.setRemedy("Set a well-defined regular expression in the pattern field of string parameters. This ensures that only strings matching the set pattern get passed to your API.");
-    issue1.setSeverity("Low");
-
-    Issue issue2 = new Issue();
-    issue2.setSummary("Response that should contain a body has no schema defined");
-    issue2.setDescription("You have not defined any schemas for responses that should contain a body.");
-    issue2.setRemedy("Define schemas for all responses that should have a body.Alternatively, if you do not want to include a body, you can change the HTTP status code in the response to one that should not have a body.");
-    issue2.setSeverity("High");
-
-    Issue[] issueArray1 = new Issue[2];
-    issueArray1[0] = issue;
-    issueArray1[1] = issue1;
-
-    Issue[] issueArray2 = new Issue[1];
-    issueArray2[0] = issue2;
-
-
-    List<Issue> issuesList = new ArrayList<>();
-    issuesList.add(issue);
-    issuesList.add(issue1);
-
-    List<Issue> issuesList1 = new ArrayList<>();
-    issuesList1.add(issue2);
-
-    SubCategory subCategory = new SubCategory();
-    subCategory.setName("Parameters");
-    subCategory.setIssues(issuesList);
-
-    SubCategory subCategory1 = new SubCategory();
-    subCategory1.setName("Response Definition");
-    subCategory1.setIssues(issuesList1);
-
-    List<SubCategory> subCategoryList = new ArrayList<>();
-    subCategoryList.add(subCategory);
-    subCategoryList.add(subCategory1);
-
-    Category category = new Category();
-    category.setName("API Standard");
-    category.setScore(70);
-    category.setSubCategories(subCategoryList);
-
-    List<Category> categoryList = new ArrayList<>();
-    categoryList.add(category);
-
-    APILyzerReport apiLyzerReport = new APILyzerReport(categoryList);
-
-  }
 
   private void init() {
     this.b = new ByteArrayOutputStream();
