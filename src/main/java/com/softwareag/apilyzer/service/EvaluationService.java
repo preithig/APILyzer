@@ -7,6 +7,10 @@ import io.swagger.v3.oas.models.OpenAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 @Service
 public class EvaluationService {
 
@@ -21,5 +25,10 @@ public class EvaluationService {
     EvaluationResult evalutionResult = new RuleExecutionEngine().evaluate(openAPI);
     evalutionResult = evaluationResultRepository.save(evalutionResult);
     return evalutionResult;
+  }
+
+  public List<EvaluationResult> history() {
+    Iterable<EvaluationResult> evaluationResultIterable = evaluationResultRepository.findAll();
+    return StreamSupport.stream(evaluationResultIterable.spliterator(), false).collect(Collectors.toList());
   }
 }

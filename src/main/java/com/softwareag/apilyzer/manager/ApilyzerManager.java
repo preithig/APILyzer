@@ -1,12 +1,14 @@
 package com.softwareag.apilyzer.manager;
 
-import com.softwareag.apilyzer.model.EvalutionResult;
+import com.softwareag.apilyzer.model.EvaluationResult;
 import com.softwareag.apilyzer.openapi.OpenAPIParser;
 import com.softwareag.apilyzer.service.ApiService;
 import com.softwareag.apilyzer.service.EvaluationService;
 import io.swagger.v3.oas.models.OpenAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class ApilyzerManager {
@@ -25,11 +27,15 @@ public class ApilyzerManager {
     this.apiService = apiService;
   }
 
-  public EvalutionResult evaluate(String json) {
+  public EvaluationResult evaluate(String json) {
 
     OpenAPI openAPI = OpenAPIParser.parse(json);
-    EvalutionResult evaluationResult = evaluationService.evaluate(openAPI);
+    EvaluationResult evaluationResult = evaluationService.evaluate(openAPI);
     apiService.save(json, evaluationResult.getId());
     return evaluationResult;
+  }
+
+  public List<EvaluationResult> history() {
+    return evaluationService.history();
   }
 }
