@@ -13,7 +13,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class SecuritySchemeRule implements IRuleSpecification {
-  List<Issue> issues = Collections.emptyList();
+  private List<Issue> issues = Collections.emptyList();
+  private int totalCount = 0;
+  private int successCount = 0;
 
   @Override
   public String getRuleName() {
@@ -58,7 +60,9 @@ public class SecuritySchemeRule implements IRuleSpecification {
   @Override
   public void execute(OpenAPI api) {
     List<Server> servers = api.getServers();
+    totalCount = servers.size();
     List<Server> httpServers = servers.stream().filter(server -> server.getUrl().split(":")[0].equals("http")).collect(Collectors.toList());
+    successCount = totalCount - httpServers.size();
     for (Server server : httpServers) {
       issues.add(createIssue(buildContext(server)));
     }
@@ -75,7 +79,7 @@ public class SecuritySchemeRule implements IRuleSpecification {
     return context;
   }
 
-  protected Issue createIssue(Map<String, String> context) {
+  private Issue createIssue(Map<String, String> context) {
     Issue issue = new Issue();
     issue.setDescription(getDescription());
     issue.setErrorInfo(getErrorInfo());
@@ -94,11 +98,11 @@ public class SecuritySchemeRule implements IRuleSpecification {
 
   @Override
   public int getTotalCount() {
-    return 0;
+    return totalCount;
   }
 
   @Override
   public int getSuccessCount() {
-    return 0;
+    return successCount;
   }
 }
