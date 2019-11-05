@@ -2,10 +2,7 @@ package com.softwareag.apilyzer.endpoints;
 
 import com.itextpdf.text.DocumentException;
 import com.softwareag.apilyzer.manager.ApilyzerManager;
-import com.softwareag.apilyzer.model.Category;
-import com.softwareag.apilyzer.model.EvaluationResult;
-import com.softwareag.apilyzer.model.Issues;
-import com.softwareag.apilyzer.model.SubCategory;
+import com.softwareag.apilyzer.model.*;
 import com.softwareag.apilyzer.report.APILyzerReport;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,29 +65,29 @@ public class ApilyzerController {
   public ResponseEntity generateReport(@PathVariable String id) {
     //Need to get the evaluation result based on the id
     EvaluationResult result = new EvaluationResult();
-    Issues issue = new Issues();
+    Issue issue = new Issue();
     issue.setSummary("Numeric parameter 'limit' of type 'integer' has no maximum defined");
     issue.setDescription("Some numeric parameters in your API do not have the maximum value specified.");
     issue.setRemedy("Set both the minimum and maximum values for numeric parameters to limit the accepted values to the range that works for your application.");
     issue.setSeverity("Low");
 
-    Issues issue1 = new Issues();
+    Issue issue1 = new Issue();
     issue1.setSummary("String parameter 'petId' has no pattern defined");
     issue1.setDescription("Some string parameters in your API do not define any pattern for the accepted strings. This means that they do not limit the values that get passed to the API.");
     issue1.setRemedy("Set a well-defined regular expression in the pattern field of string parameters. This ensures that only strings matching the set pattern get passed to your API.");
     issue1.setSeverity("Low");
 
-    Issues issue2 = new Issues();
+    Issue issue2 = new Issue();
     issue2.setSummary("Response that should contain a body has no schema defined");
     issue2.setDescription("You have not defined any schemas for responses that should contain a body.");
     issue2.setRemedy("Define schemas for all responses that should have a body.Alternatively, if you do not want to include a body, you can change the HTTP status code in the response to one that should not have a body.");
     issue2.setSeverity("High");
 
-    List<Issues> issuesList = new ArrayList<>();
+    List<Issue> issuesList = new ArrayList<>();
     issuesList.add(issue);
     issuesList.add(issue1);
 
-    List<Issues> issuesList1 = new ArrayList<>();
+    List<Issue> issuesList1 = new ArrayList<>();
     issuesList1.add(issue2);
 
     SubCategory subCategory = new SubCategory();
