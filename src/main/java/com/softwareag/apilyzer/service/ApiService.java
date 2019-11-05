@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ApilyzerService {
+public class ApiService {
 
   private ApiRepository apiRepository;
 
@@ -15,14 +15,16 @@ public class ApilyzerService {
     this.apiRepository = apiRepository;
   }
 
-  public Api save(String json) {
+  public Api save(String json, String evaluationId) {
     Api api = new Api();
     api.setApi(json);
+    api.setEvaluationId(evaluationId);
     return apiRepository.save(api);
   }
 
   public Api get(String id) {
     return apiRepository.findById(id).get();
   }
+
 
 }

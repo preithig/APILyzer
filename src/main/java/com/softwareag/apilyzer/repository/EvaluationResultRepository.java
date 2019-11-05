@@ -1,10 +1,9 @@
 package com.softwareag.apilyzer.repository;
 
-import com.softwareag.apilyzer.model.Api;
+import com.softwareag.apilyzer.model.EvaluationResult;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ApiRepository extends ElasticsearchRepository<Api, String> {
-
+public interface EvaluationResultRepository extends ElasticsearchRepository<EvaluationResult, String> {
 }

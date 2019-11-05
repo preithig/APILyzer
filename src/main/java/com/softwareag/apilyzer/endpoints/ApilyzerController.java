@@ -1,11 +1,13 @@
 package com.softwareag.apilyzer.endpoints;
 
-import com.softwareag.apilyzer.openapi.OpenAPIParser;
-import com.softwareag.apilyzer.service.ApilyzerService;
+import com.softwareag.apilyzer.manager.ApilyzerManager;
+import com.softwareag.apilyzer.model.EvalutionResult;
 import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,27 +17,25 @@ import java.nio.charset.StandardCharsets;
 @RequestMapping("/rest")
 public class ApilyzerController {
 
-  private ApilyzerService apilyzerService;
 
-  @Autowired
-  public void setApilyzerService(ApilyzerService apilyzerService) {
-    this.apilyzerService = apilyzerService;
+  private ApilyzerManager manager;
+
+  public void setManager(ApilyzerManager manager) {
+    this.manager = manager;
   }
 
   @PostMapping("/evaluate")
-  public void evaluate(@RequestParam("file") MultipartFile multipartFile) {
+  public ResponseEntity<EvalutionResult> evaluate(@RequestParam("file") MultipartFile multipartFile) {
     try {
 
       InputStream inputStream = multipartFile.getInputStream();
       String json = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
 
-      OpenAPIParser parser = new OpenAPIParser();
-      parser.parse(json);
-      apilyzerService.save(json);
-
+      EvalutionResult evaluationResult = manager.evaluate(json);
+      return new ResponseEntity<>(evaluationResult, HttpStatus.OK);
 
     } catch (IOException e) {
-
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
   }
