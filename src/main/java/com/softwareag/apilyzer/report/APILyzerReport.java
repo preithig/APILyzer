@@ -4,7 +4,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.softwareag.apilyzer.model.Issues;
+import com.softwareag.apilyzer.model.Issue;
 import com.softwareag.apilyzer.model.Category;
 import com.softwareag.apilyzer.model.SubCategory;
 
@@ -34,38 +34,38 @@ public class APILyzerReport {
   }
 
   public static void main(String[] args) throws DocumentException {
-    Issues issue = new Issues();
+    Issue issue = new Issue();
     issue.setSummary("Numeric parameter 'limit' of type 'integer' has no maximum defined");
     issue.setDescription("Some numeric parameters in your API do not have the maximum value specified.");
     issue.setRemedy("Set both the minimum and maximum values for numeric parameters to limit the accepted values to the range that works for your application.");
     issue.setSeverity("Low");
 
-    Issues issue1 = new Issues();
+    Issue issue1 = new Issue();
     issue1.setSummary("String parameter 'petId' has no pattern defined");
     issue1.setDescription("Some string parameters in your API do not define any pattern for the accepted strings. This means that they do not limit the values that get passed to the API.");
     issue1.setRemedy("Set a well-defined regular expression in the pattern field of string parameters. This ensures that only strings matching the set pattern get passed to your API.");
     issue1.setSeverity("Low");
 
-    Issues issue2 = new Issues();
+    Issue issue2 = new Issue();
     issue2.setSummary("Response that should contain a body has no schema defined");
     issue2.setDescription("You have not defined any schemas for responses that should contain a body.");
     issue2.setRemedy("Define schemas for all responses that should have a body.Alternatively, if you do not want to include a body, you can change the HTTP status code in the response to one that should not have a body.");
     issue2.setSeverity("High");
 
-    Issues[] issuesArray1 = new Issues[2];
-    issuesArray1[0] = issue;
-    issuesArray1[1] = issue1;
+    Issue[] issueArray1 = new Issue[2];
+    issueArray1[0] = issue;
+    issueArray1[1] = issue1;
 
-    Issues[] issuesArray2 = new Issues[1];
-    issuesArray2[0] = issue2;
+    Issue[] issueArray2 = new Issue[1];
+    issueArray2[0] = issue2;
 
     SubCategory subCategory = new SubCategory();
     subCategory.setName("Parameters");
-    subCategory.setIssues(issuesArray1);
+    subCategory.setIssues(issueArray1);
 
     SubCategory subCategory1 = new SubCategory();
     subCategory1.setName("Response Definition");
-    subCategory1.setIssues(issuesArray2);
+    subCategory1.setIssues(issueArray2);
 
     SubCategory[] subCategoryArray = new SubCategory[2];
     subCategoryArray[0] = subCategory;
@@ -168,14 +168,14 @@ public class APILyzerReport {
 
   }
 
-  private void createTable(Issues[] issues) {
+  private void createTable(Issue[] issues) {
     PdfPTable table = new PdfPTable(new float[]{1, 2, 3, 1});
     table.setHorizontalAlignment(Element.ALIGN_LEFT);
     table.setWidthPercentage(100);
 
     writeHeader(table);
 
-    for (Issues issue : issues) {
+    for (Issue issue : issues) {
       table.addCell(issue.getSummary());
       table.addCell(issue.getDescription());
       table.addCell(issue.getRemedy());
