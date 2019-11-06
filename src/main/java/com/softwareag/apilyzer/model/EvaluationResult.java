@@ -21,7 +21,7 @@ public class EvaluationResult {
   private String id;
 
   @Field(type = FieldType.Integer)
-  private int score;
+  private double score;
 
   @Field(type = FieldType.Nested)
   private List<Category> categories = new ArrayList<>();
@@ -53,11 +53,11 @@ public class EvaluationResult {
     this.categories = categories;
   }
 
-  public int getScore() {
+  public double getScore() {
     return score;
   }
 
-  public void setScore(int score) {
+  public void setScore(double score) {
     this.score = score;
   }
 }

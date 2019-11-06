@@ -1,5 +1,6 @@
 package com.softwareag.apilyzer.engine;
 
+import com.google.common.util.concurrent.AtomicDouble;
 import com.softwareag.apilyzer.api.CategoryEnum;
 import com.softwareag.apilyzer.api.IRuleExecutionEngine;
 import com.softwareag.apilyzer.api.IRuleSpecification;
@@ -21,8 +22,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Component
 public class RuleExecutionEngine implements IRuleExecutionEngine {
 
-  private Map<String, Integer> categoryMaxScoreMap = new HashMap<>();
-  private Map<String, Integer> categoryActualScoreMap = new HashMap<>();
+  private Map<String, Double> categoryMaxScoreMap = new HashMap<>();
+  private Map<String, Double> categoryActualScoreMap = new HashMap<>();
 
   private SecuritySchemeRule securitySchemeRule;
   private MissingInfoDescriptionRule missingInfoDescriptionRule;
@@ -72,19 +73,19 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
 
   private void calculateCategoryScore(EvaluationResult result) {
     for (Category category : result.getCategories()) {
-      int max = categoryMaxScoreMap.get(category.getName());
-      int actual = categoryActualScoreMap.get(category.getName());
+      double max = categoryMaxScoreMap.get(category.getName());
+      double actual = categoryActualScoreMap.get(category.getName());
 
       DecimalFormat dec = new DecimalFormat("#0.00");
-      category.setScore(Integer.valueOf(dec.format(actual / max)) * 100);
+      category.setScore(Double.valueOf(dec.format(actual / max)) * 100);
     }
   }
 
   private void calculateAPIScore(EvaluationResult result) {
-    AtomicInteger sum = new AtomicInteger();
+    AtomicDouble sum = new AtomicDouble();
     result.getCategories().forEach(c -> sum.addAndGet(c.getScore()));
     DecimalFormat dec = new DecimalFormat("#0.00");
-    result.setScore(Integer.valueOf(dec.format(sum.get() / result.getCategories().size())) * 100);
+    result.setScore(Double.valueOf(dec.format(sum.get() / result.getCategories().size())));
   }
 
   private void evaluateRuleSpecification(OpenAPI openAPI, EvaluationResult result) {
@@ -143,11 +144,11 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
     updateScore(categoryMaxScoreMap, categoryName, severity, successCount);
   }
 
-  private void updateScore(Map<String, Integer> map, CategoryEnum categoryName, SeverityEnum severity, int count) {
-    map.putIfAbsent(categoryName.name(), 0);
-    Integer previousMax = map.get(categoryName.name());
+  private void updateScore(Map<String, Double> map, CategoryEnum categoryName, SeverityEnum severity, int count) {
+    map.putIfAbsent(categoryName.name(), 0.0);
+    Double previousMax = map.get(categoryName.name());
 
-    int newMax = previousMax + (getScoreBySeverity(severity) * count);
+    double newMax = previousMax + (getScoreBySeverity(severity) * count);
     map.put(categoryName.name(), newMax);
   }
 

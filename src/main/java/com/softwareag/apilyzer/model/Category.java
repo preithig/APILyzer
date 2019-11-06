@@ -7,7 +7,7 @@ public class Category {
 
   private String name;
 
-  private int score;
+  private double score;
 
   private List<SubCategory> subCategories = new ArrayList<>();
 
@@ -22,11 +22,11 @@ public class Category {
     this.name = name;
   }
 
-  public int getScore() {
+  public double getScore() {
     return score;
   }
 
-  public void setScore(int score) {
+  public void setScore(double score) {
     this.score = score;
   }
 
