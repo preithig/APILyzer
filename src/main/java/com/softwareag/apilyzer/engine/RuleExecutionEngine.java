@@ -97,9 +97,7 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
 
       updateActualScore(rule.getCategoryName(), rule.getSeverity(), rule.getSuccessCount());
 
-      if (rule.getIssues() != null && !rule.getIssues().isEmpty()) {
-        updateResult(rule, result);
-      }
+      updateResult(rule, result);
     }
   }
 
