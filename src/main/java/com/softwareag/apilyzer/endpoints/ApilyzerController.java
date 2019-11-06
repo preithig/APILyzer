@@ -54,7 +54,7 @@ public class ApilyzerController {
   }
 
   @PostMapping("/issue/{id}/fix")
-  public ResponseEntity<EvaluationResult> fix(String value) {
+  public ResponseEntity<EvaluationResult> fix(@PathVariable String id, @RequestBody String value) {
 
     EvaluationResult evaluationResult = manager.fix(value);
     return new ResponseEntity<>(evaluationResult, HttpStatus.OK);

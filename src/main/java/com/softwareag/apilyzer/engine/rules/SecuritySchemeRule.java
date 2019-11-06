@@ -1,9 +1,11 @@
 package com.softwareag.apilyzer.engine.rules;
 
 import com.softwareag.apilyzer.api.*;
+import com.softwareag.apilyzer.engine.IssuesUtil;
 import com.softwareag.apilyzer.model.Issue;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.servers.Server;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,6 +18,13 @@ public class SecuritySchemeRule implements IRuleSpecification {
   private List<Issue> issues = Collections.emptyList();
   private int totalCount = 0;
   private int successCount = 0;
+
+  private IssuesUtil issuesUtil;
+
+  @Autowired
+  public void setIssuesUtil(IssuesUtil issuesUtil) {
+    this.issuesUtil = issuesUtil;
+  }
 
   @Override
   public String getRuleName() {
@@ -64,7 +73,7 @@ public class SecuritySchemeRule implements IRuleSpecification {
     List<Server> httpServers = servers.stream().filter(server -> server.getUrl().split(":")[0].equals("http")).collect(Collectors.toList());
     successCount = totalCount - httpServers.size();
     for (Server server : httpServers) {
-      issues.add(createIssue(buildContext(server)));
+      issues.add(issuesUtil.createIssue(this, buildContext(server)));
     }
   }
 
@@ -77,18 +86,6 @@ public class SecuritySchemeRule implements IRuleSpecification {
     context.put("rulename", RuleEnum.SECURITY_SCHEME.name());
     context.put("rulepath", server.getUrl());
     return context;
-  }
-
-  private Issue createIssue(Map<String, String> context) {
-    Issue issue = new Issue();
-    issue.setDescription(getDescription());
-    issue.setErrorInfo(getErrorInfo());
-    issue.setName(getRuleName());
-    issue.setRemedy(getRemedy());
-    issue.setSeverity(getSeverity().name());
-    issue.setSummary(getSummary());
-    issue.setContext(context);
-    return issue;
   }
 
   @Override

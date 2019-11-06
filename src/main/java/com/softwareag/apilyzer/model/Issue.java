@@ -1,19 +1,31 @@
 package com.softwareag.apilyzer.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+
 import java.util.Map;
 
+@Document(indexName = "issues", type = "default")
 public class Issue {
 
+  @Id
   private String id;
 
+  @Field(type = FieldType.Text)
   private String name;
 
+  @Field(type = FieldType.Text)
   private String summary;
 
+  @Field(type = FieldType.Text)
   private String description;
 
+  @Field(type = FieldType.Text)
   private String remedy;
 
+  @Field(type = FieldType.Keyword)
   private String severity;
 
   private String errorInfo;
