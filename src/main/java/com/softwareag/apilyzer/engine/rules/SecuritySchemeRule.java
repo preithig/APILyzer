@@ -1,21 +1,21 @@
 package com.softwareag.apilyzer.engine.rules;
 
-import com.softwareag.apilyzer.api.*;
+import com.softwareag.apilyzer.api.CategoryEnum;
+import com.softwareag.apilyzer.api.RuleEnum;
+import com.softwareag.apilyzer.api.SeverityEnum;
+import com.softwareag.apilyzer.api.SubCategoryEnum;
 import com.softwareag.apilyzer.model.Issue;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.servers.Server;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class SecuritySchemeRule implements IRuleSpecification {
-  private List<Issue> issues = Collections.emptyList();
-  private int totalCount = 0;
-  private int successCount = 0;
+public class SecuritySchemeRule extends AbstractRuleSpecification {
+
 
   @Override
   public String getRuleName() {
@@ -79,30 +79,7 @@ public class SecuritySchemeRule implements IRuleSpecification {
     return context;
   }
 
-  private Issue createIssue(Map<String, String> context) {
-    Issue issue = new Issue();
-    issue.setDescription(getDescription());
-    issue.setErrorInfo(getErrorInfo());
-    issue.setName(getRuleName());
-    issue.setRemedy(getRemedy());
-    issue.setSeverity(getSeverity().name());
-    issue.setSummary(getSummary());
-    issue.setContext(context);
-    return issue;
-  }
 
-  @Override
-  public List<Issue> getIssues() {
-    return issues;
-  }
 
-  @Override
-  public int getTotalCount() {
-    return totalCount;
-  }
 
-  @Override
-  public int getSuccessCount() {
-    return successCount;
-  }
 }
