@@ -1,5 +1,6 @@
 package com.softwareag.apilyzer.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -9,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Document(type = "default", indexName = "evaluations")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+
 public class EvaluationResult {
 
   @Field(type = FieldType.Text)

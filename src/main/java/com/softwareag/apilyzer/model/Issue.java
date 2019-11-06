@@ -1,5 +1,6 @@
 package com.softwareag.apilyzer.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -8,6 +9,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.util.Map;
 
 @Document(indexName = "issues", type = "default")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Issue {
 
   @Id

@@ -47,7 +47,7 @@ public class EvaluationService {
 
     evalutionResult.getCategories().stream().forEach(category -> {
       category.getSubCategories().stream().forEach(subCategory -> {
-        subCategory.setIssueList(Collections.emptyList());
+        subCategory.setIssueList(null);
       });
     });
 
