@@ -2,7 +2,7 @@ package com.softwareag.apilyzer.endpoints;
 
 import com.itextpdf.text.DocumentException;
 import com.softwareag.apilyzer.manager.ApilyzerManager;
-import com.softwareag.apilyzer.model.*;
+import com.softwareag.apilyzer.model.EvaluationResult;
 import com.softwareag.apilyzer.report.APILyzerReport;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -53,10 +52,10 @@ public class ApilyzerController {
     return manager.history();
   }
 
-  @PostMapping("/issue/{id}/fix")
-  public ResponseEntity<EvaluationResult> fix(@PathVariable String id, @RequestBody String value) {
+  @PostMapping("/evaluations/{evaluationId}/issue/{issueId}/fix")
+  public ResponseEntity<EvaluationResult> fix(@PathVariable String evaluationId, @PathVariable String issueId, @RequestBody String value) {
 
-    EvaluationResult evaluationResult = manager.fix(value);
+    EvaluationResult evaluationResult = manager.fix(evaluationId, issueId , value);
     return new ResponseEntity<>(evaluationResult, HttpStatus.OK);
 
   }

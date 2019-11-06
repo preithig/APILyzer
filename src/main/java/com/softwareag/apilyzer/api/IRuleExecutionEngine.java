@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface IRuleExecutionEngine {
 
-    List<IRuleSpecification> getAllRules();
+  List<IRuleSpecification> getAllRules();
 
-    EvaluationResult evaluate(OpenAPI openAPI);
+  EvaluationResult evaluate(OpenAPI openAPI);
+
 }

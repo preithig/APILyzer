@@ -4,7 +4,8 @@ import com.softwareag.apilyzer.api.CategoryEnum;
 import com.softwareag.apilyzer.api.IRuleExecutionEngine;
 import com.softwareag.apilyzer.api.IRuleSpecification;
 import com.softwareag.apilyzer.api.SeverityEnum;
-import com.softwareag.apilyzer.engine.rules.MissingDescriptionRule;
+import com.softwareag.apilyzer.engine.rules.MissingInfoDescriptionRule;
+import com.softwareag.apilyzer.engine.rules.MissingServerDescriptionRule;
 import com.softwareag.apilyzer.engine.rules.SecuritySchemeRule;
 import com.softwareag.apilyzer.model.Category;
 import com.softwareag.apilyzer.model.EvaluationResult;
@@ -24,7 +25,8 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
   private Map<String, Integer> categoryActualScoreMap = new HashMap<>();
 
   private SecuritySchemeRule securitySchemeRule;
-  private MissingDescriptionRule missingDescriptionRule;
+  private MissingInfoDescriptionRule missingInfoDescriptionRule;
+  private MissingServerDescriptionRule missingServerDescriptionRule;
 
   @Autowired
   public void setSecuritySchemeRule(SecuritySchemeRule securitySchemeRule) {
@@ -32,8 +34,13 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
   }
 
   @Autowired
-  public void setMissingDescriptionRule(MissingDescriptionRule missingDescriptionRule) {
-    this.missingDescriptionRule = missingDescriptionRule;
+  public void setMissingInfoDescriptionRule(MissingInfoDescriptionRule missingInfoDescriptionRule) {
+    this.missingInfoDescriptionRule = missingInfoDescriptionRule;
+  }
+
+  @Autowired
+  public void setMissingServerDescriptionRule(MissingServerDescriptionRule missingServerDescriptionRule) {
+    this.missingServerDescriptionRule = missingServerDescriptionRule;
   }
 
   @Override
@@ -41,7 +48,8 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
     List<IRuleSpecification> specs = new ArrayList<>();
 
     specs.add(securitySchemeRule);
-    specs.add(missingDescriptionRule);
+    specs.add(missingInfoDescriptionRule);
+    specs.add(missingServerDescriptionRule);
 
     return specs;
   }

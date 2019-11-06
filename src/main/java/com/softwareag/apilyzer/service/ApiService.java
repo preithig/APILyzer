@@ -5,6 +5,8 @@ import com.softwareag.apilyzer.repository.ApiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class ApiService {
 
@@ -24,6 +26,14 @@ public class ApiService {
 
   public Api get(String id) {
     return apiRepository.findById(id).get();
+  }
+
+  public Api findByEvaluationId(String eId) {
+    Optional<Api> apiOptional = apiRepository.findById(eId);
+    if (apiOptional.isPresent()) {
+      return apiOptional.get();
+    }
+    return null;
   }
 
 

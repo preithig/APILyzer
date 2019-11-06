@@ -14,6 +14,9 @@ public class EvaluationResult {
   @Field(type = FieldType.Text)
   private String apiName;
 
+  @Field(type = FieldType.Keyword)
+  private String apiId;
+
   @Id
   private String id;
 

@@ -32,4 +32,8 @@ public class IssuesUtil {
 
   }
 
+  public Issue getIssue(String id) {
+    return issuesRepository.findById(id).get();
+  }
+
 }
