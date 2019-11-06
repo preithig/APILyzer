@@ -7,11 +7,16 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.softwareag.apilyzer.model.Category;
 import com.softwareag.apilyzer.model.Issue;
 import com.softwareag.apilyzer.model.SubCategory;
+import com.softwareag.apilyzer.repository.IssuesRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.StreamSupport;
+
+import static java.util.stream.Collectors.toList;
 
 public class APILyzerReport {
 
@@ -22,6 +27,12 @@ public class APILyzerReport {
   private static Font fontBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
   private static Font subCategoryFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC);
   private List<Category> categories;
+  private IssuesRepository issuesRepository;
+
+  @Autowired
+  public void setIssuesRepository(IssuesRepository issuesRepository) {
+    this.issuesRepository = issuesRepository;
+  }
 
   public APILyzerReport(List<Category> categories) throws DocumentException {
     this.categories = categories;
@@ -122,7 +133,10 @@ public class APILyzerReport {
         SubCategory subCategory = category.getSubCategories().get(sc_Index);
         phrase = new Phrase(subCategory.getName(), subCategoryFont);
         doc.add(phrase);
-        createTable(subCategory.getIssues());
+        Iterable<Issue> iterableIssues = issuesRepository.findAllById(subCategory.getIssues());
+        List<Issue> issues = StreamSupport.stream(iterableIssues.spliterator(), false)
+            .collect(toList());
+        createTable(issues);
         doc.add(Chunk.NEWLINE);
       }
     }
