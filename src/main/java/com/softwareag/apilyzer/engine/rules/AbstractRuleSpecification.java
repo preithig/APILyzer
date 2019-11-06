@@ -28,16 +28,4 @@ public abstract class AbstractRuleSpecification implements IRuleSpecification {
     return issues;
   }
 
-  protected Issue createIssue(Map<String, String> context) {
-    Issue issue = new Issue();
-    issue.setDescription(getDescription());
-    issue.setErrorInfo(getErrorInfo());
-    issue.setName(getRuleName());
-    issue.setRemedy(getRemedy());
-    issue.setSeverity(getSeverity().name());
-    issue.setSummary(getSummary());
-    issue.setContext(context);
-    return issue;
-  }
-
 }

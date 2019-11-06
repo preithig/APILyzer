@@ -24,7 +24,7 @@ public class MissingServerDescriptionRule extends MissingDescriptionRule {
     this.issuesUtil = issuesUtil;
   }
 
-  public void executeRule(OpenAPI api) {
+  public void execute(OpenAPI api) {
     if (Objects.nonNull(api.getServers())) {
       totalCount = api.getServers().size();
       List<Server> serverWithMissingDesc = api.getServers().stream().filter(server -> Strings.isNullOrEmpty(server.getDescription())).collect(Collectors.toList());

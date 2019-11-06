@@ -21,7 +21,7 @@ public class MissingInfoDescriptionRule extends MissingDescriptionRule {
     this.issuesUtil = issuesUtil;
   }
 
-  public void executeRule(OpenAPI api) {
+  public void execute(OpenAPI api) {
     Info info = api.getInfo();
     if (Strings.isNullOrEmpty(info.getDescription())) {
       issues.add(issuesUtil.createIssue(this, buildContext()));
