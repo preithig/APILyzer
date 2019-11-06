@@ -8,6 +8,7 @@ import com.softwareag.apilyzer.engine.IssuesUtil;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
+@Scope("prototype")
 public class SecuritySchemeRule extends AbstractRuleSpecification {
 
   private IssuesUtil issuesUtil;
