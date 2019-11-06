@@ -1,23 +1,16 @@
 package com.softwareag.apilyzer.engine.rules;
 
 import com.softwareag.apilyzer.api.CategoryEnum;
-import com.softwareag.apilyzer.api.IRuleSpecification;
 import com.softwareag.apilyzer.api.SeverityEnum;
 import com.softwareag.apilyzer.api.SubCategoryEnum;
-import com.softwareag.apilyzer.model.Issue;
 import io.swagger.v3.oas.models.OpenAPI;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
-public abstract class MissingDescriptionRule implements IRuleSpecification {
+public abstract class MissingDescriptionRule extends AbstractRuleSpecification {
 
   List<MissingDescriptionRule> list = Arrays.asList(new MissingInfoDescriptionRule(), new MissingServerDescriptionRule());
-  List<Issue> issues = Collections.emptyList();
-  int totalCount = 0;
-  int successCount = 0;
 
   @Override
   public String getRuleName() {
@@ -50,32 +43,5 @@ public abstract class MissingDescriptionRule implements IRuleSpecification {
 
   }
 
-  @Override
-  public int getTotalCount() {
-    return 0;
-  }
-
-  @Override
-  public int getSuccessCount() {
-    return 0;
-  }
-
-
-  @Override
-  public List<Issue> getIssues() {
-    return issues;
-  }
-
-  protected Issue createIssue(Map<String, String> context) {
-    Issue issue = new Issue();
-    issue.setDescription(getDescription());
-    issue.setErrorInfo(getErrorInfo());
-    issue.setName(getRuleName());
-    issue.setRemedy(getRemedy());
-    issue.setSeverity(getSeverity().name());
-    issue.setSummary(getSummary());
-    issue.setContext(context);
-    return issue;
-  }
 
 }
