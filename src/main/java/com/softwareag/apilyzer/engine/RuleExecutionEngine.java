@@ -12,45 +12,22 @@ import com.softwareag.apilyzer.model.Category;
 import com.softwareag.apilyzer.model.EvaluationResult;
 import com.softwareag.apilyzer.model.SubCategory;
 import io.swagger.v3.oas.models.OpenAPI;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
-@Component
 public class RuleExecutionEngine implements IRuleExecutionEngine {
 
   private Map<String, Double> categoryMaxScoreMap = new HashMap<>();
   private Map<String, Double> categoryActualScoreMap = new HashMap<>();
 
-  private SecuritySchemeRule securitySchemeRule;
-  private MissingInfoDescriptionRule missingInfoDescriptionRule;
-  private MissingServerDescriptionRule missingServerDescriptionRule;
-
-  @Autowired
-  public void setSecuritySchemeRule(SecuritySchemeRule securitySchemeRule) {
-    this.securitySchemeRule = securitySchemeRule;
-  }
-
-  @Autowired
-  public void setMissingInfoDescriptionRule(MissingInfoDescriptionRule missingInfoDescriptionRule) {
-    this.missingInfoDescriptionRule = missingInfoDescriptionRule;
-  }
-
-  @Autowired
-  public void setMissingServerDescriptionRule(MissingServerDescriptionRule missingServerDescriptionRule) {
-    this.missingServerDescriptionRule = missingServerDescriptionRule;
-  }
-
   @Override
   public List<IRuleSpecification> getAllRules() {
     List<IRuleSpecification> specs = new ArrayList<>();
 
-    specs.add(securitySchemeRule);
-    specs.add(missingInfoDescriptionRule);
-    specs.add(missingServerDescriptionRule);
+    specs.add(new SecuritySchemeRule());
+    specs.add(new MissingInfoDescriptionRule());
+    specs.add(new MissingServerDescriptionRule());
 
     return specs;
   }
@@ -112,18 +89,18 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
       SubCategory s = createSubCategory(rule);
       c.getSubCategories().add(s);
 
-      s.getIssues().addAll(rule.getIssues());
+      s.getIssueList().addAll(rule.getIssues());
     } else {
       Category category = any.get();
       Optional<SubCategory> scOptional = category.getSubCategories()
           .stream().filter(s -> s.getName().equals(rule.getSubCategoryName().name())).findAny();
       if (scOptional.isPresent()) {
         SubCategory subCategory = scOptional.get();
-        subCategory.getIssues().addAll(rule.getIssues());
+        subCategory.getIssueList().addAll(rule.getIssues());
       } else {
         SubCategory s = createSubCategory(rule);
         category.getSubCategories().add(s);
-        s.getIssues().addAll(rule.getIssues());
+        s.getIssueList().addAll(rule.getIssues());
       }
     }
   }

@@ -9,8 +9,18 @@ public class SubCategory {
 
   private List<String> issues = new ArrayList<>();
 
+  private transient List<Issue> issueList = new ArrayList<>();
+
   public SubCategory() {
 
+  }
+
+  public List<Issue> getIssueList() {
+    return issueList;
+  }
+
+  public void setIssueList(List<Issue> issueList) {
+    this.issueList = issueList;
   }
 
   public String getName() {

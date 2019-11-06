@@ -4,28 +4,16 @@ import com.softwareag.apilyzer.api.CategoryEnum;
 import com.softwareag.apilyzer.api.RuleEnum;
 import com.softwareag.apilyzer.api.SeverityEnum;
 import com.softwareag.apilyzer.api.SubCategoryEnum;
-import com.softwareag.apilyzer.engine.IssuesUtil;
+import com.softwareag.apilyzer.model.Issue;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.servers.Server;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Component
-@Scope("prototype")
 public class SecuritySchemeRule extends AbstractRuleSpecification {
-
-  private IssuesUtil issuesUtil;
-
-  @Autowired
-  public void setIssuesUtil(IssuesUtil issuesUtil) {
-    this.issuesUtil = issuesUtil;
-  }
 
   @Override
   public String getRuleName() {
@@ -74,7 +62,8 @@ public class SecuritySchemeRule extends AbstractRuleSpecification {
     List<Server> httpServers = servers.stream().filter(server -> server.getUrl().split(":")[0].equals("http")).collect(Collectors.toList());
     successCount = totalCount - httpServers.size();
     for (Server server : httpServers) {
-      issues.add(issuesUtil.createIssue(this, buildContext(server)));
+      //issues.add(issuesUtil.createIssue(this, buildContext(server)));
+      issues.add(createIssue(buildContext(server)));
     }
   }
 
@@ -86,7 +75,7 @@ public class SecuritySchemeRule extends AbstractRuleSpecification {
   }
 
   @Override
-  public List<String> getIssues() {
+  public List<Issue> getIssues() {
     return issues;
   }
 

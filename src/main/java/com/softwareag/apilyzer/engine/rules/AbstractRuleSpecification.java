@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractRuleSpecification implements IRuleSpecification {
-  List<String> issues = Lists.newArrayList();
+  List<Issue> issues = Lists.newArrayList();
   int totalCount = 0;
   int successCount = 0;
 
@@ -24,8 +24,20 @@ public abstract class AbstractRuleSpecification implements IRuleSpecification {
 
 
   @Override
-  public List<String> getIssues() {
+  public List<Issue> getIssues() {
     return issues;
+  }
+
+  protected Issue createIssue(Map<String, String> context) {
+    Issue issue = new Issue();
+    issue.setDescription(getDescription());
+    issue.setErrorInfo(getErrorInfo());
+    issue.setName(getRuleName());
+    issue.setRemedy(getRemedy());
+    issue.setSeverity(getSeverity().name());
+    issue.setSummary(getSummary());
+    issue.setContext(context);
+    return issue;
   }
 
 }

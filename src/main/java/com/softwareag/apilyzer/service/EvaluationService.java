@@ -5,10 +5,12 @@ import com.softwareag.apilyzer.engine.RuleExecutionEngine;
 import com.softwareag.apilyzer.model.EvaluationResult;
 import com.softwareag.apilyzer.model.Issue;
 import com.softwareag.apilyzer.repository.EvaluationResultRepository;
+import com.softwareag.apilyzer.repository.IssuesRepository;
 import io.swagger.v3.oas.models.OpenAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -17,12 +19,11 @@ import java.util.stream.StreamSupport;
 public class EvaluationService {
 
   private EvaluationResultRepository evaluationResultRepository;
-  private RuleExecutionEngine executionEngine;
-
+  private IssuesRepository issuesRepository;
 
   @Autowired
-  public void setExecutionEngine(RuleExecutionEngine executionEngine) {
-    this.executionEngine = executionEngine;
+  public void setIssuesRepository(IssuesRepository issuesRepository) {
+    this.issuesRepository = issuesRepository;
   }
 
   @Autowired
@@ -32,7 +33,24 @@ public class EvaluationService {
 
 
   public EvaluationResult evaluate(OpenAPI openAPI) {
-    EvaluationResult evalutionResult = executionEngine.evaluate(openAPI);
+    EvaluationResult evalutionResult = new RuleExecutionEngine().evaluate(openAPI);
+
+    evalutionResult.getCategories().stream().forEach(category -> {
+      category.getSubCategories().stream().forEach(subCategory -> {
+        List<Issue> issueList = subCategory.getIssueList();
+        for (Issue issue : issueList) {
+          Issue issueSaved = issuesRepository.save(issue);
+          subCategory.getIssues().add(issueSaved.getId());
+        }
+      });
+    });
+
+    evalutionResult.getCategories().stream().forEach(category -> {
+      category.getSubCategories().stream().forEach(subCategory -> {
+        subCategory.setIssueList(Collections.emptyList());
+      });
+    });
+
     evalutionResult = evaluationResultRepository.save(evalutionResult);
     return evalutionResult;
   }
