@@ -1,14 +1,14 @@
 package com.softwareag.apilyzer.engine.rules;
 
+import com.google.common.collect.Lists;
 import com.softwareag.apilyzer.api.IRuleSpecification;
 import com.softwareag.apilyzer.model.Issue;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractRuleSpecification implements IRuleSpecification {
-  List<String> issues = Collections.emptyList();
+  List<String> issues = Lists.newArrayList();
   int totalCount = 0;
   int successCount = 0;
 
