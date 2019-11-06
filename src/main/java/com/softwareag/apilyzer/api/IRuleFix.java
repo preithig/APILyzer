@@ -5,5 +5,5 @@ import io.swagger.v3.oas.models.OpenAPI;
 
 public interface IRuleFix {
 
-  public boolean fix(Issue issue, OpenAPI openAPI, Object data);
+  public OpenAPI fix(Issue issue, OpenAPI openAPI, Object data);
 }

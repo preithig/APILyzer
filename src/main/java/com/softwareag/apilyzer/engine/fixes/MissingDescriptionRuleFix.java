@@ -1,25 +1,23 @@
 package com.softwareag.apilyzer.engine.fixes;
 
 import com.softwareag.apilyzer.api.IRuleFix;
+import com.softwareag.apilyzer.api.RuleEnum;
 import com.softwareag.apilyzer.model.Issue;
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.Paths;
 
-import java.util.Map;
-import java.util.Set;
+public abstract class MissingDescriptionRuleFix implements IRuleFix {
 
-public class MissingDescriptionRuleFix implements IRuleFix {
+  public abstract OpenAPI fixIssue(Issue issue, OpenAPI openAPI, Object data);
 
   @Override
-  public boolean fix(Issue issue, OpenAPI openAPI, Object data) {
-
-    Map<String, String> context = issue.getContext();
-    Set<String> keys = context.keySet();
-    Paths paths = openAPI.getPaths();
-    for (String key : keys) {
-      paths.get(key);
-
+  public OpenAPI fix(Issue issue, OpenAPI openAPI, Object data) {
+    switch (RuleEnum.valueOf(issue.getName())) {
+      case MISSING_INFO_DESC:
+        return new MissingInfoDescriptionFix().fixIssue(issue, openAPI, data);
+      case MISSING_SERVER_DESC:
+        return openAPI;
     }
-    return false;
+    return openAPI;
   }
+
 }
