@@ -15,7 +15,7 @@ public abstract class MissingDescriptionRuleFix implements IRuleFix {
       case MISSING_INFO_DESC:
         return new MissingInfoDescriptionFix().fixIssue(issue, openAPI, data);
       case MISSING_SERVER_DESC:
-        return openAPI;
+        return new MissingServerDescriptionFix().fixIssue(issue, openAPI, data);
     }
     return openAPI;
   }

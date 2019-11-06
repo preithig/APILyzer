@@ -15,14 +15,22 @@ import java.util.stream.StreamSupport;
 public class EvaluationService {
 
   private EvaluationResultRepository evaluationResultRepository;
+  private RuleExecutionEngine executionEngine;
+
+
+  @Autowired
+  public void setExecutionEngine(RuleExecutionEngine executionEngine) {
+    this.executionEngine = executionEngine;
+  }
 
   @Autowired
   public void setEvaluationResultRepository(EvaluationResultRepository evaluationResultRepository) {
     this.evaluationResultRepository = evaluationResultRepository;
   }
 
+
   public EvaluationResult evaluate(OpenAPI openAPI) {
-    EvaluationResult evalutionResult = new RuleExecutionEngine().evaluate(openAPI);
+    EvaluationResult evalutionResult = executionEngine.evaluate(openAPI);
     evalutionResult = evaluationResultRepository.save(evalutionResult);
     return evalutionResult;
   }
