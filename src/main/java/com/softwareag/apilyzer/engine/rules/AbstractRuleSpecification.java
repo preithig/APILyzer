@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractRuleSpecification implements IRuleSpecification {
-  List<Issue> issues = Collections.emptyList();
+  List<String> issues = Collections.emptyList();
   int totalCount = 0;
   int successCount = 0;
 
@@ -24,7 +24,7 @@ public abstract class AbstractRuleSpecification implements IRuleSpecification {
 
 
   @Override
-  public List<Issue> getIssues() {
+  public List<String> getIssues() {
     return issues;
   }
 

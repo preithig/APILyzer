@@ -65,7 +65,7 @@ public class ApilyzerController {
   public ResponseEntity generateReport(@PathVariable String id) {
     //Need to get the evaluation result based on the id
     EvaluationResult result = new EvaluationResult();
-    Issue issue = new Issue();
+    /*Issue issue = new Issue();
     issue.setSummary("Numeric parameter 'limit' of type 'integer' has no maximum defined");
     issue.setDescription("Some numeric parameters in your API do not have the maximum value specified.");
     issue.setRemedy("Set both the minimum and maximum values for numeric parameters to limit the accepted values to the range that works for your application.");
@@ -108,9 +108,9 @@ public class ApilyzerController {
     category.setSubCategories(subCategoryList);
 
     List<Category> categoryList = new ArrayList<>();
-    categoryList.add(category);
+    categoryList.add(category);*/
     try {
-      APILyzerReport report = new APILyzerReport(categoryList);
+      APILyzerReport report = new APILyzerReport(result.getCategories());
       byte[] content = report.export();
       return ResponseEntity.ok()
           .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Api_Analysis_" + "test" + ".pdf")

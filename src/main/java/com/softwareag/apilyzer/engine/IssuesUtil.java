@@ -18,7 +18,7 @@ public class IssuesUtil {
     this.issuesRepository = issuesRepository;
   }
 
-  public Issue createIssue(IRuleSpecification rule, Map<String, String> context) {
+  public String createIssue(IRuleSpecification rule, Map<String, String> context) {
     Issue issue = new Issue();
     issue.setDescription(rule.getDescription());
     issue.setErrorInfo(rule.getErrorInfo());
@@ -27,7 +27,8 @@ public class IssuesUtil {
     issue.setSeverity(rule.getSeverity().name());
     issue.setSummary(rule.getSummary());
     issue.setContext(context);
-    return issuesRepository.save(issue);
+    issue = issuesRepository.save(issue);
+    return issue.getId();
 
   }
 

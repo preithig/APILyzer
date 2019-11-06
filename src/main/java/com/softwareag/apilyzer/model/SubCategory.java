@@ -7,7 +7,7 @@ public class SubCategory {
 
   private String name;
 
-  private List<Issue> issues = new ArrayList<>();
+  private List<String> issues = new ArrayList<>();
 
   public SubCategory() {
 
@@ -21,11 +21,11 @@ public class SubCategory {
     this.name = name;
   }
 
-  public List<Issue> getIssues() {
+  public List<String> getIssues() {
     return issues;
   }
 
-  public void setIssues(List<Issue> issues) {
+  public void setIssues(List<String> issues) {
     this.issues = issues;
   }
 }

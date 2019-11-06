@@ -25,7 +25,7 @@ public interface IRuleSpecification {
 
   void execute(OpenAPI api);
 
-  List<Issue> getIssues();
+  List<String> getIssues();
 
   int getTotalCount();
 

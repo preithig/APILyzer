@@ -5,10 +5,10 @@ import com.softwareag.apilyzer.api.RuleEnum;
 import com.softwareag.apilyzer.api.SeverityEnum;
 import com.softwareag.apilyzer.api.SubCategoryEnum;
 import com.softwareag.apilyzer.engine.IssuesUtil;
-import com.softwareag.apilyzer.model.Issue;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,8 +16,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Component
 public class SecuritySchemeRule extends AbstractRuleSpecification {
-
 
   private IssuesUtil issuesUtil;
 
@@ -77,10 +77,6 @@ public class SecuritySchemeRule extends AbstractRuleSpecification {
     }
   }
 
-  private Function<String, String> getScheme = (url) -> {
-    return url.split(":")[0];
-  };
-
   private Map<String, String> buildContext(Server server) {
     Map<String, String> context = new HashMap<>();
     context.put("rulename", RuleEnum.SECURITY_SCHEME.name());
@@ -89,7 +85,7 @@ public class SecuritySchemeRule extends AbstractRuleSpecification {
   }
 
   @Override
-  public List<Issue> getIssues() {
+  public List<String> getIssues() {
     return issues;
   }
 
