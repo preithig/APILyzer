@@ -68,13 +68,9 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
 
             rule.execute(openAPI);
 
-            for(int i=0; i < rule.getTotalCount(); i++) {
-                updateMaxScore(rule.getCategoryName(), rule.getSeverity());
-            }
+            updateMaxScore(rule.getCategoryName(), rule.getSeverity(), rule.getTotalCount());
 
-            for(int i=0; i < rule.getSuccessCount(); i++) {
-                updateActualScore(rule.getCategoryName(), rule.getSeverity());
-            }
+            updateActualScore(rule.getCategoryName(), rule.getSeverity(), rule.getSuccessCount());
 
             if(rule.getIssues() != null && !rule.getIssues().isEmpty()) {
                 updateResult(rule, result);
@@ -115,19 +111,19 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
         return s;
     }
 
-    private void updateActualScore(CategoryEnum categoryName, SeverityEnum severity) {
-        updateScore(categoryActualScoreMap, categoryName, severity);
+    private void updateActualScore(CategoryEnum categoryName, SeverityEnum severity, int totalCount) {
+        updateScore(categoryActualScoreMap, categoryName, severity, totalCount);
     }
 
-    private void updateMaxScore(CategoryEnum categoryName, SeverityEnum severity) {
-        updateScore(categoryMaxScoreMap, categoryName, severity);
+    private void updateMaxScore(CategoryEnum categoryName, SeverityEnum severity, int successCount) {
+        updateScore(categoryMaxScoreMap, categoryName, severity, successCount);
     }
 
-    private void updateScore(Map<String, Integer> map, CategoryEnum categoryName, SeverityEnum severity) {
+    private void updateScore(Map<String, Integer> map, CategoryEnum categoryName, SeverityEnum severity, int count) {
         map.putIfAbsent(categoryName.name(), 0);
         Integer previousMax = map.get(categoryName.name());
 
-        int newMax = previousMax + getScoreBySeverity(severity);
+        int newMax = previousMax + (getScoreBySeverity(severity) * count);
         map.put(categoryName.name(), newMax);
     }
 
