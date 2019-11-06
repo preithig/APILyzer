@@ -116,7 +116,7 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
     } else {
       Category category = any.get();
       Optional<SubCategory> scOptional = category.getSubCategories()
-          .stream().filter(s -> s.getName().equals(rule.getSeverity().name())).findAny();
+          .stream().filter(s -> s.getName().equals(rule.getSubCategoryName().name())).findAny();
       if (scOptional.isPresent()) {
         SubCategory subCategory = scOptional.get();
         subCategory.getIssues().addAll(rule.getIssues());
