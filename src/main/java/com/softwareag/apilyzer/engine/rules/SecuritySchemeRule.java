@@ -93,7 +93,7 @@ public class SecuritySchemeRule implements IRuleSpecification {
 
   @Override
   public List<Issue> getIssues() {
-    return null;
+    return issues;
   }
 
   @Override
