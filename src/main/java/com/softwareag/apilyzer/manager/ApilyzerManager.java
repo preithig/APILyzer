@@ -2,6 +2,7 @@ package com.softwareag.apilyzer.manager;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softwareag.apilyzer.engine.IssuesUtil;
+import com.softwareag.apilyzer.exception.NotValidAPIException;
 import com.softwareag.apilyzer.model.Api;
 import com.softwareag.apilyzer.model.EvaluationResult;
 import com.softwareag.apilyzer.model.FixData;
@@ -37,9 +38,12 @@ public class ApilyzerManager {
     this.apiService = apiService;
   }
 
-  public EvaluationResult evaluate(String json) {
+  public EvaluationResult evaluate(String json) throws NotValidAPIException {
 
     OpenAPI openAPI = OpenAPIParser.parse(json);
+    if (openAPI == null) {
+      throw new NotValidAPIException("This OpenAPI is invalid");
+    }
     EvaluationResult evaluationResult = evaluationService.evaluate(openAPI);
     apiService.save(json, evaluationResult.getId());
     return evaluationResult;
@@ -63,5 +67,9 @@ public class ApilyzerManager {
     }
     return evaluationResult;
 
+  }
+
+  public EvaluationResult getEvaluationResult(String evaluationID){
+    return evaluationService.getEvaluationResult(evaluationID);
   }
 }
