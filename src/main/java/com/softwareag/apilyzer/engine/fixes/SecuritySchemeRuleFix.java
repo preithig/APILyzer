@@ -19,7 +19,7 @@ public class SecuritySchemeRuleFix implements IRuleFix {
     Map<String, String> context = issue.getContext();
     List<Server> httpServers = openAPI.getServers().stream().filter(server -> server.getUrl().split(":")[0].equals("http")).collect(Collectors.toList());
     Optional<Server> optional = httpServers.stream().filter(server -> server.getUrl().equals(context.get("rulepath"))).findAny();
-    optional.get().setUrl(optional.get().getUrl().replace("http", data.getScheme()));
+    optional.get().setUrl(optional.get().getUrl().replace("http", "https"));
     return openAPI;
   }
 }
