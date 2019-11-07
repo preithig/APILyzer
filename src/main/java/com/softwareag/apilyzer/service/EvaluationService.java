@@ -1,5 +1,6 @@
 package com.softwareag.apilyzer.service;
 
+import com.google.common.collect.Lists;
 import com.softwareag.apilyzer.engine.FixUtil;
 import com.softwareag.apilyzer.engine.RuleExecutionEngine;
 import com.softwareag.apilyzer.model.EvaluationResult;
@@ -11,8 +12,8 @@ import io.swagger.v3.oas.models.OpenAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -53,7 +54,26 @@ public class EvaluationService {
     });
 
     evalutionResult = evaluationResultRepository.save(evalutionResult);
-    return evalutionResult;
+
+    return getEvaluationResult(evalutionResult.getId());
+  }
+
+  private EvaluationResult getEvaluationResult(String id) {
+    Optional<EvaluationResult> evaluationResult = evaluationResultRepository.findById(id);
+
+    if (!evaluationResult.isPresent()) {
+      return null;
+    }
+    evaluationResult.get().getCategories().stream().forEach(category -> {
+      category.getSubCategories().stream().forEach(subCategory -> {
+        subCategory.setIssueList(Lists.newArrayList());
+        for (String issueId : subCategory.getIssues()) {
+
+          subCategory.getIssueList().add(issuesRepository.findById(issueId).get());
+        }
+      });
+    });
+    return evaluationResult.get();
   }
 
   public List<EvaluationResult> history() {
