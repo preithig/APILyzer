@@ -133,16 +133,11 @@ public class APILyzerReport {
         SubCategory subCategory = category.getSubCategories().get(sc_Index);
         phrase = new Phrase(subCategory.getName(), subCategoryFont);
         doc.add(phrase);
-        Iterable<Issue> iterableIssues = issuesRepository.findAllById(subCategory.getIssues());
-        List<Issue> issues = StreamSupport.stream(iterableIssues.spliterator(), false)
-            .collect(toList());
-        createTable(issues);
+        createTable(subCategory.getIssueList());
         doc.add(Chunk.NEWLINE);
       }
     }
-
   }
-
 
   private void createTable(List<Issue> issues) {
     PdfPTable table = new PdfPTable(new float[]{1, 2, 3, 1});
