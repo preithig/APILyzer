@@ -76,7 +76,9 @@ public class Missing2xxResponseRule extends AbstractRuleSpecification {
           }
         }
         if (!positiveStatusCode.get()) {
-          issues.add(createIssue(buildContext(path, op)));
+          Issue issue = createIssue(buildContext(path, op));
+          issue.setErrorInfo("Missing in the path: " + path);
+          issues.add(issue);
         }
       }
     }
