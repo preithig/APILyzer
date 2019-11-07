@@ -17,9 +17,9 @@ public class FixUtil {
         return new MissingInfoDescriptionFix().fix(issue, openAPI, data);
       case MISSING_SERVER_DESC:
         return new MissingServerDescriptionFix().fix(issue, openAPI, data);
-      case SECURITY_SCHEME:
+      case HTTP_SECURITY_SCHEME:
         return new SecuritySchemeRuleFix().fix(issue, openAPI, data);
-      case RESPONSE_DETAILS:
+      case OPERATION_2XX_RESPONSE:
         return new Missing2xxResponseRuleFix().fix(issue, openAPI, data);
     }
     return openAPI;

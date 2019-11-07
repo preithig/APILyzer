@@ -17,7 +17,7 @@ public class SecuritySchemeRule extends AbstractRuleSpecification {
 
   @Override
   public String getRuleName() {
-    return RuleEnum.SECURITY_SCHEME.getRulename();
+    return RuleEnum.HTTP_SECURITY_SCHEME.getRulename();
   }
 
   @Override
@@ -37,17 +37,17 @@ public class SecuritySchemeRule extends AbstractRuleSpecification {
 
   @Override
   public String getSummary() {
-    return RuleEnum.SECURITY_SCHEME.getSummary();
+    return RuleEnum.HTTP_SECURITY_SCHEME.getSummary();
   }
 
   @Override
   public String getDescription() {
-    return RuleEnum.SECURITY_SCHEME.getDescription();
+    return RuleEnum.HTTP_SECURITY_SCHEME.getDescription();
   }
 
   @Override
   public String getRemedy() {
-    return RuleEnum.SECURITY_SCHEME.getRemedy();
+    return RuleEnum.HTTP_SECURITY_SCHEME.getRemedy();
   }
 
   @Override
@@ -69,7 +69,7 @@ public class SecuritySchemeRule extends AbstractRuleSpecification {
 
   private Map<String, String> buildContext(Server server) {
     Map<String, String> context = new HashMap<>();
-    context.put("rulename", RuleEnum.SECURITY_SCHEME.name());
+    context.put("rulename", RuleEnum.HTTP_SECURITY_SCHEME.name());
     context.put("rulepath", server.getUrl());
     return context;
   }

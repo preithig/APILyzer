@@ -3,9 +3,9 @@ package com.softwareag.apilyzer.api;
 public enum RuleEnum {
   MISSING_INFO_DESC("MISSING_INFO_DESC", "Description is missing in the Info section", "Description is missing in the Info section", "To fix this issue, please give a value to the  description field in the Info section"),
   MISSING_SERVER_DESC("MISSING_SERVER_DESC", "Description is missing in the Server section", "Description is missing in the Server section", "To fix this issue, please give a value to the  description field in the Server section"),
-  SECURITY_SCHEME("HTTP_SECURITY_SCHEME","API accepts HTTP requests in the clear","The API accepts HTTP communications in the clear. HTTP traffic is not encrypted and can thus be easily intercepted.","Remove http from the schemes list, and only include https"),
+  HTTP_SECURITY_SCHEME("HTTP_SECURITY_SCHEME","API accepts HTTP requests in the clear","The API accepts HTTP communications in the clear. HTTP traffic is not encrypted and can thus be easily intercepted.","Remove http from the schemes list, and only include https"),
   MISSING_SERVER_INFORMATION("MISSING_SERVER_INFORMATION", "Server information is missing", "Information about the server is missing in the document", "To fix this issue, please give the server information data at the root level"),
-  RESPONSE_DETAILS("OPERATION-2XX-RESPONSE", "Operation must have at least one 2xx response.", "Any API operation (endpoint) can fail but presumably it is also meant to do something constructive at some point.It is important to have 2xx response details for each endpoint","Add 2xx response details in the endpoints");
+  OPERATION_2XX_RESPONSE("OPERATION_2XX_RESPONSE", "Operation must have at least one 2xx response.", "Any API operation (endpoint) can fail but presumably it is also meant to do something constructive at some point.It is important to have 2xx response details for each endpoint","Add 2xx response details in the endpoints");
 
   private String rulename, summary, description, remedy;
 

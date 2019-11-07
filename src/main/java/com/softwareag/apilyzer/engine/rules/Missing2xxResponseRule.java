@@ -21,7 +21,7 @@ public class Missing2xxResponseRule extends AbstractRuleSpecification {
 
   @Override
   public String getRuleName() {
-    return RuleEnum.RESPONSE_DETAILS.getRulename();
+    return RuleEnum.OPERATION_2XX_RESPONSE.getRulename();
   }
 
   @Override
@@ -41,17 +41,17 @@ public class Missing2xxResponseRule extends AbstractRuleSpecification {
 
   @Override
   public String getSummary() {
-    return RuleEnum.RESPONSE_DETAILS.getSummary();
+    return RuleEnum.OPERATION_2XX_RESPONSE.getSummary();
   }
 
   @Override
   public String getDescription() {
-    return RuleEnum.RESPONSE_DETAILS.getDescription();
+    return RuleEnum.OPERATION_2XX_RESPONSE.getDescription();
   }
 
   @Override
   public String getRemedy() {
-    return RuleEnum.RESPONSE_DETAILS.getRemedy();
+    return RuleEnum.OPERATION_2XX_RESPONSE.getRemedy();
   }
 
   @Override
@@ -84,7 +84,7 @@ public class Missing2xxResponseRule extends AbstractRuleSpecification {
 
   private Map<String, String> buildContext(String path, Operation op) {
     Map<String, String> context = new HashMap<>();
-    context.put("rulename", RuleEnum.RESPONSE_DETAILS.name());
+    context.put("rulename", RuleEnum.OPERATION_2XX_RESPONSE.name());
     context.put("rulepath", path);
     context.put("operationId",op.getOperationId());
     return context;
