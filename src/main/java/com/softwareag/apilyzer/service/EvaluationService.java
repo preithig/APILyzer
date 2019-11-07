@@ -3,6 +3,7 @@ package com.softwareag.apilyzer.service;
 import com.softwareag.apilyzer.engine.FixUtil;
 import com.softwareag.apilyzer.engine.RuleExecutionEngine;
 import com.softwareag.apilyzer.model.EvaluationResult;
+import com.softwareag.apilyzer.model.FixData;
 import com.softwareag.apilyzer.model.Issue;
 import com.softwareag.apilyzer.repository.EvaluationResultRepository;
 import com.softwareag.apilyzer.repository.IssuesRepository;
@@ -64,7 +65,7 @@ public class EvaluationService {
     return evaluationResultRepository.findById(id).get();
   }
 
-  public OpenAPI fix(Issue issue, OpenAPI openAPI, Object data) {
+  public OpenAPI fix(Issue issue, OpenAPI openAPI, FixData data) {
     return FixUtil.fix(issue, openAPI, data);
   }
 }

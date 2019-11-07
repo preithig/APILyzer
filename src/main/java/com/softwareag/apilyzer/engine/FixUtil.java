@@ -4,12 +4,13 @@ import com.softwareag.apilyzer.api.RuleEnum;
 import com.softwareag.apilyzer.engine.fixes.MissingInfoDescriptionFix;
 import com.softwareag.apilyzer.engine.fixes.MissingServerDescriptionFix;
 import com.softwareag.apilyzer.engine.fixes.SecuritySchemeRuleFix;
+import com.softwareag.apilyzer.model.FixData;
 import com.softwareag.apilyzer.model.Issue;
 import io.swagger.v3.oas.models.OpenAPI;
 
 public class FixUtil {
 
-  public static OpenAPI fix(Issue issue, OpenAPI openAPI, Object data) {
+  public static OpenAPI fix(Issue issue, OpenAPI openAPI, FixData data) {
     switch (RuleEnum.valueOf(issue.getName())) {
       case MISSING_INFO_DESC:
         return new MissingInfoDescriptionFix().fix(issue, openAPI, data);

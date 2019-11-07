@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softwareag.apilyzer.engine.IssuesUtil;
 import com.softwareag.apilyzer.model.Api;
 import com.softwareag.apilyzer.model.EvaluationResult;
+import com.softwareag.apilyzer.model.FixData;
 import com.softwareag.apilyzer.model.Issue;
 import com.softwareag.apilyzer.openapi.OpenAPIParser;
 import com.softwareag.apilyzer.service.ApiService;
@@ -48,12 +49,12 @@ public class ApilyzerManager {
     return evaluationService.history();
   }
 
-  public EvaluationResult fix(String evaluationId, String issueId, String value) {
+  public EvaluationResult fix(String evaluationId, String issueId, FixData fixData) {
 
     Issue issue = issuesUtil.getIssue(issueId);
     Api api = apiService.findByEvaluationId(evaluationId);
     OpenAPI openApi = OpenAPIParser.parse(api.getApi());
-    OpenAPI fixedOpenApi = evaluationService.fix(issue, openApi, value);
+    OpenAPI fixedOpenApi = evaluationService.fix(issue, openApi, fixData);
     EvaluationResult evaluationResult = evaluationService.evaluate(fixedOpenApi);
     try {
       apiService.save(new ObjectMapper().writeValueAsString(fixedOpenApi), evaluationResult.getId());
