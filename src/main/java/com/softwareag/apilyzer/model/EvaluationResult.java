@@ -1,6 +1,7 @@
 package com.softwareag.apilyzer.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.softwareag.apilyzer.api.CategoryEnum;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -50,6 +51,10 @@ public class EvaluationResult {
   }
 
   public EvaluationResult() {
+    getCategories().add(new Category(CategoryEnum.API_STANDARDS.name(), 100));
+    getCategories().add(new Category(CategoryEnum.EASE_OF_USE.name(), 100));
+    getCategories().add(new Category(CategoryEnum.SECURITY_STANDARDS.name(), 100));
+    getCategories().add(new Category(CategoryEnum.PERFORMANCE_STANDARDS.name(), 100));
   }
 
   public String getApiName() {

@@ -66,9 +66,9 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
     for (Category category : result.getCategories()) {
       double max = categoryMaxScoreMap.get(category.getName());
       double actual = categoryActualScoreMap.get(category.getName());
-
       DecimalFormat dec = new DecimalFormat("#0.00");
-      category.setScore(Double.parseDouble(dec.format(actual / max)) * 100);
+      if(max > 0.0)
+        category.setScore(Double.parseDouble(dec.format(actual / max)) * 100);
     }
   }
 

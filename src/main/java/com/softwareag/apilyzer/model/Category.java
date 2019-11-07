@@ -14,6 +14,11 @@ public class Category {
   public Category() {
   }
 
+  public Category(String name, double score) {
+    this.name = name;
+    this.score = score;
+  }
+
   public String getName() {
     return name;
   }
