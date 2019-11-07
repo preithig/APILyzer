@@ -1,6 +1,5 @@
 package com.softwareag.apilyzer.manager;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softwareag.apilyzer.engine.IssuesUtil;
 import com.softwareag.apilyzer.exception.NotValidAPIException;
 import com.softwareag.apilyzer.model.Api;
@@ -14,6 +13,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.List;
 
 @Component
@@ -38,14 +38,14 @@ public class ApilyzerManager {
     this.apiService = apiService;
   }
 
-  public EvaluationResult evaluate(String json) throws NotValidAPIException {
+  public EvaluationResult evaluate(String json) throws NotValidAPIException, IOException {
 
     OpenAPI openAPI = OpenAPIParser.parse(json);
     if (openAPI == null) {
       throw new NotValidAPIException("This OpenAPI is invalid");
     }
     EvaluationResult evaluationResult = evaluationService.evaluate(openAPI);
-    apiService.save(json, evaluationResult.getId());
+    apiService.save(openAPI, evaluationResult.getId());
     return evaluationResult;
   }
 
@@ -53,23 +53,25 @@ public class ApilyzerManager {
     return evaluationService.history();
   }
 
-  public EvaluationResult fix(String evaluationId, String issueId, FixData fixData) {
+  public EvaluationResult fix(String evaluationId, String issueId, FixData fixData) throws IOException{
 
     Issue issue = issuesUtil.getIssue(issueId);
     Api api = apiService.findByEvaluationId(evaluationId);
     OpenAPI openApi = OpenAPIParser.parse(api.getApi());
     OpenAPI fixedOpenApi = evaluationService.fix(issue, openApi, fixData);
     EvaluationResult evaluationResult = evaluationService.evaluate(fixedOpenApi);
-    try {
-      apiService.save(new ObjectMapper().writeValueAsString(fixedOpenApi), evaluationResult.getId());
-    } catch (Exception e) {
-
-    }
+    apiService.save(fixedOpenApi, evaluationResult.getId());
     return evaluationResult;
 
   }
 
-  public EvaluationResult getEvaluationResult(String evaluationID){
+  public EvaluationResult getEvaluationResult(String evaluationID) {
     return evaluationService.getEvaluationResult(evaluationID);
+  }
+
+  public Api download(String evaluationId) {
+
+    Api api = apiService.findByEvaluationId(evaluationId);
+    return api;
   }
 }

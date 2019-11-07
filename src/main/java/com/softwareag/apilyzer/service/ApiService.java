@@ -1,10 +1,13 @@
 package com.softwareag.apilyzer.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softwareag.apilyzer.model.Api;
 import com.softwareag.apilyzer.repository.ApiRepository;
+import io.swagger.v3.oas.models.OpenAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Component
@@ -17,9 +20,10 @@ public class ApiService {
     this.apiRepository = apiRepository;
   }
 
-  public Api save(String json, String evaluationId) {
+  public Api save(OpenAPI openAPI, String evaluationId) throws IOException {
     Api api = new Api();
-    api.setApi(json);
+    api.setApi(new ObjectMapper().writeValueAsString(openAPI));
+    api.setApiName(openAPI.getInfo().getTitle());
     api.setEvaluationId(evaluationId);
     return apiRepository.save(api);
   }

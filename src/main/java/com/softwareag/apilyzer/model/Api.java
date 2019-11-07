@@ -17,6 +17,17 @@ public class Api {
   @Field(type = FieldType.Keyword)
   String evaluationId;
 
+  @Field(type = FieldType.Text)
+  String apiName;
+
+  public String getApiName() {
+    return apiName;
+  }
+
+  public void setApiName(String apiName) {
+    this.apiName = apiName;
+  }
+
   public String getId() {
     return id;
   }

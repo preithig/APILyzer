@@ -3,6 +3,7 @@ package com.softwareag.apilyzer.endpoints;
 import com.itextpdf.text.DocumentException;
 import com.softwareag.apilyzer.exception.NotValidAPIException;
 import com.softwareag.apilyzer.manager.ApilyzerManager;
+import com.softwareag.apilyzer.model.Api;
 import com.softwareag.apilyzer.model.EvaluationResult;
 import com.softwareag.apilyzer.model.FixData;
 import com.softwareag.apilyzer.report.APILyzerReport;
@@ -66,8 +67,13 @@ public class ApilyzerController {
   @PostMapping("/evaluations/{evaluationId}/issues/{issueId}/fix")
   public ResponseEntity<EvaluationResult> fix(@PathVariable String evaluationId, @PathVariable String issueId, @RequestBody FixData fixData) {
 
-    EvaluationResult evaluationResult = manager.fix(evaluationId, issueId, fixData);
-    return new ResponseEntity<>(evaluationResult, HttpStatus.OK);
+    try {
+      EvaluationResult evaluationResult = manager.fix(evaluationId, issueId, fixData);
+      return new ResponseEntity<>(evaluationResult, HttpStatus.OK);
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+
+    }
 
   }
 
@@ -86,6 +92,18 @@ public class ApilyzerController {
       e.printStackTrace();
     }
     return null;
+  }
+
+
+  @GetMapping("/{id}/download")
+  public ResponseEntity downloadAPI(@PathVariable String id) {
+    Api api = manager.download(id);
+    byte[] content = api.getApi().getBytes(StandardCharsets.UTF_8);
+    return ResponseEntity.ok()
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + api.getApiName() + ".json")
+        .contentLength(content.length)
+        .contentType(MediaType.parseMediaType("application/octet-stream"))
+        .body(content);
   }
 
 }
