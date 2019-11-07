@@ -10,10 +10,7 @@ import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.Paths;
 import io.swagger.v3.oas.models.servers.Server;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toList;
@@ -65,25 +62,37 @@ public class MissingServerInformationRule extends AbstractRuleSpecification {
     List<Server> serverList = api.getServers();
 
     if (!serverList.isEmpty() && serverList.size() > 0) {
-      return;
+      Optional<Server> validServer = serverList.stream().filter(server -> !server.getUrl().equals("/")).findAny();
+
+      if (validServer.isPresent()) {
+        totalCount = 1;
+        successCount = 1;
+        return;
+      }
     }
 
     Paths paths = api.getPaths();
     Set<String> keys = paths.keySet();
 
+    totalCount = keys.size();
     for (String path : keys) {
       PathItem pathItem = paths.get(path);
-      if (pathItem.getServers().isEmpty() && pathItem.getServers().size() == 0) {
+      if (pathItem.getServers() == null || pathItem.getServers().size() == 0) {
 
         List<Map.Entry<String, Operation>> operations = getOperations(pathItem);
 
         if (operations != null) {
           for (Map.Entry<String, Operation> operationEntry : operations) {
-            if (operationEntry.getValue().getServers().isEmpty() || operationEntry.getValue().getServers().size() == 0) {
-              createIssue(buildContext(path, operationEntry.getKey(), operationEntry.getValue()));
+            totalCount += 1;
+            if (operationEntry.getValue().getServers() == null || operationEntry.getValue().getServers().size() == 0) {
+              issues.add(createIssue(buildContext(path, operationEntry.getKey(), operationEntry.getValue())));
+            } else {
+              successCount += 1;
             }
           }
         }
+      } else {
+        successCount += 1;
       }
 
     }

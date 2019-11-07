@@ -60,7 +60,7 @@ public class EvaluationService {
     return getEvaluationResult(evalutionResult.getId());
   }
 
-  private EvaluationResult getEvaluationResult(String id) {
+  public EvaluationResult getEvaluationResult(String id) {
     Optional<EvaluationResult> evaluationResult = evaluationResultRepository.findById(id);
 
     if (!evaluationResult.isPresent()) {

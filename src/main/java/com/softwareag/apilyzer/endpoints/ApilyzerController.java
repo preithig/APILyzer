@@ -1,6 +1,7 @@
 package com.softwareag.apilyzer.endpoints;
 
 import com.itextpdf.text.DocumentException;
+import com.softwareag.apilyzer.exception.NotValidAPIException;
 import com.softwareag.apilyzer.manager.ApilyzerManager;
 import com.softwareag.apilyzer.model.EvaluationResult;
 import com.softwareag.apilyzer.model.FixData;
@@ -44,6 +45,8 @@ public class ApilyzerController {
 
     } catch (IOException e) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+    } catch (NotValidAPIException e) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
   }
@@ -56,7 +59,7 @@ public class ApilyzerController {
   @PostMapping("/evaluations/{evaluationId}/issues/{issueId}/fix")
   public ResponseEntity<EvaluationResult> fix(@PathVariable String evaluationId, @PathVariable String issueId, @RequestBody FixData fixData) {
 
-    EvaluationResult evaluationResult = manager.fix(evaluationId, issueId , fixData);
+    EvaluationResult evaluationResult = manager.fix(evaluationId, issueId, fixData);
     return new ResponseEntity<>(evaluationResult, HttpStatus.OK);
 
   }
