@@ -62,8 +62,9 @@ public class SecuritySchemeRule extends AbstractRuleSpecification {
     List<Server> httpServers = servers.stream().filter(server -> server.getUrl().split(":")[0].equals("http")).collect(Collectors.toList());
     successCount = totalCount - httpServers.size();
     for (Server server : httpServers) {
-      //issues.add(issuesUtil.createIssue(this, buildContext(server)));
-      issues.add(createIssue(buildContext(server)));
+      Issue issue = createIssue(buildContext(server));
+      issue.setErrorInfo("Server with url: " + server.getUrl());
+      issues.add(issue);
     }
   }
 
