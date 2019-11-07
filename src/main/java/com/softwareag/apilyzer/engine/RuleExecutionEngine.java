@@ -4,10 +4,7 @@ import com.softwareag.apilyzer.api.CategoryEnum;
 import com.softwareag.apilyzer.api.IRuleExecutionEngine;
 import com.softwareag.apilyzer.api.IRuleSpecification;
 import com.softwareag.apilyzer.api.SeverityEnum;
-import com.softwareag.apilyzer.engine.rules.Missing2xxResponseRule;
-import com.softwareag.apilyzer.engine.rules.MissingInfoDescriptionRule;
-import com.softwareag.apilyzer.engine.rules.MissingServerDescriptionRule;
-import com.softwareag.apilyzer.engine.rules.SecuritySchemeRule;
+import com.softwareag.apilyzer.engine.rules.*;
 import com.softwareag.apilyzer.model.Category;
 import com.softwareag.apilyzer.model.EvaluationResult;
 import com.softwareag.apilyzer.model.SubCategory;
@@ -29,6 +26,7 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
     specs.add(new MissingInfoDescriptionRule());
     specs.add(new MissingServerDescriptionRule());
     specs.add(new Missing2xxResponseRule());
+    specs.add(new MissingServerInformationRule());
 
     return specs;
   }

@@ -12,6 +12,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -53,6 +54,7 @@ public class EvaluationService {
       });
     });
 
+    evalutionResult.setEvaluationDate(new Date());
     evalutionResult = evaluationResultRepository.save(evalutionResult);
 
     return getEvaluationResult(evalutionResult.getId());
