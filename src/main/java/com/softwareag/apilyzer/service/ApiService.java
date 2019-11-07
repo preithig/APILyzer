@@ -29,7 +29,7 @@ public class ApiService {
   }
 
   public Api findByEvaluationId(String eId) {
-    Optional<Api> apiOptional = apiRepository.findById(eId);
+    Optional<Api> apiOptional = apiRepository.findApiByEvaluationId(eId);
     if (apiOptional.isPresent()) {
       return apiOptional.get();
     }

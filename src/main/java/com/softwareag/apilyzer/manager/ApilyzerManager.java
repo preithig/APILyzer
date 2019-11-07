@@ -1,5 +1,6 @@
 package com.softwareag.apilyzer.manager;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softwareag.apilyzer.engine.IssuesUtil;
 import com.softwareag.apilyzer.model.Api;
 import com.softwareag.apilyzer.model.EvaluationResult;
@@ -52,8 +53,14 @@ public class ApilyzerManager {
     Issue issue = issuesUtil.getIssue(issueId);
     Api api = apiService.findByEvaluationId(evaluationId);
     OpenAPI openApi = OpenAPIParser.parse(api.getApi());
-    evaluationService.fix(issue, openApi, value);
+    OpenAPI fixedOpenApi = evaluationService.fix(issue, openApi, value);
+    EvaluationResult evaluationResult = evaluationService.evaluate(fixedOpenApi);
+    try {
+      apiService.save(new ObjectMapper().writeValueAsString(fixedOpenApi), evaluationResult.getId());
+    } catch (Exception e) {
 
-    return null;
+    }
+    return evaluationResult;
+
   }
 }

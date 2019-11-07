@@ -52,7 +52,7 @@ public class ApilyzerController {
     return manager.history();
   }
 
-  @PostMapping("/evaluations/{evaluationId}/issue/{issueId}/fix")
+  @PostMapping("/evaluations/{evaluationId}/issues/{issueId}/fix")
   public ResponseEntity<EvaluationResult> fix(@PathVariable String evaluationId, @PathVariable String issueId, @RequestBody String value) {
 
     EvaluationResult evaluationResult = manager.fix(evaluationId, issueId , value);

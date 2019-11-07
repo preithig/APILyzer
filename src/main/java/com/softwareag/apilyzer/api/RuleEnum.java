@@ -3,7 +3,8 @@ package com.softwareag.apilyzer.api;
 public enum RuleEnum {
   MISSING_INFO_DESC("MISSING_INFO_DESC", "Description is missing in the Info section", "Description is missing in the Info section", "To fix this issue, please give a value to the  description field in the Info section"),
   MISSING_SERVER_DESC("MISSING_SERVER_DESC", "Description is missing in the Server section", "Description is missing in the Server section", "To fix this issue, please give a value to the  description field in the Server section"),
-  SECURITY_SCHEME("HTTP_SECURITY_SCHEME","API accepts HTTP requests in the clear","The API accepts HTTP communications in the clear. HTTP traffic is not encrypted and can thus be easily intercepted.","Remove http from the schemes list, and only include https");
+  SECURITY_SCHEME("HTTP_SECURITY_SCHEME","API accepts HTTP requests in the clear","The API accepts HTTP communications in the clear. HTTP traffic is not encrypted and can thus be easily intercepted.","Remove http from the schemes list, and only include https"),
+  MISSING_SERVER_INFORMATION("MISSING_SERVER_INFORMATION", "Server information is missing", "Information about the server is missing in the document", "To fix this issue, please give the server information data at the root level");
 
   private String rulename, summary, description, remedy;
 
