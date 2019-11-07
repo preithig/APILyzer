@@ -54,15 +54,22 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
       double actual = categoryActualScoreMap.get(category.getName());
 
       DecimalFormat dec = new DecimalFormat("#0.00");
-      category.setScore(Double.valueOf(dec.format(actual / max)) * 100);
+      category.setScore(Double.parseDouble(dec.format(actual / max)) * 100);
     }
   }
 
   private void calculateAPIScore(EvaluationResult result) {
-    AtomicDouble sum = new AtomicDouble();
-    result.getCategories().forEach(c -> sum.addAndGet(c.getScore()));
-    DecimalFormat dec = new DecimalFormat("#0.00");
-    result.setScore(Double.valueOf(dec.format(sum.get() / result.getCategories().size())));
+    CategoryEnum[] categories = CategoryEnum.values();
+    double apiScore = 0;
+    for (CategoryEnum category : categories) {
+      Double catMaxScore = categoryMaxScoreMap.get(category.name());
+      Double catActualScore = categoryActualScoreMap.get(category.name());
+      DecimalFormat dec = new DecimalFormat("#0.00");
+      Double catScore = Double.parseDouble(dec.format(catActualScore / catMaxScore)) * 100;
+      apiScore += catScore;
+    }
+    apiScore = apiScore / categories.length;
+    result.setScore(apiScore);
   }
 
   private void evaluateRuleSpecification(OpenAPI openAPI, EvaluationResult result) {
@@ -74,7 +81,9 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
 
       updateActualScore(rule.getCategoryName(), rule.getSeverity(), rule.getSuccessCount());
 
-      updateResult(rule, result);
+      if (rule.getIssues() != null && !rule.getIssues().isEmpty()) {
+        updateResult(rule, result);
+      }
     }
   }
 
