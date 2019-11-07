@@ -1,6 +1,5 @@
 package com.softwareag.apilyzer.engine;
 
-import com.google.common.util.concurrent.AtomicDouble;
 import com.softwareag.apilyzer.api.CategoryEnum;
 import com.softwareag.apilyzer.api.IRuleExecutionEngine;
 import com.softwareag.apilyzer.api.IRuleSpecification;
@@ -35,6 +34,8 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
   @Override
   public EvaluationResult evaluate(OpenAPI openAPI) {
 
+    initCategoryScores();
+
     EvaluationResult result = new EvaluationResult();
 
     addBasicInfo(result, openAPI);
@@ -46,6 +47,19 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
     calculateAPIScore(result);
 
     return result;
+  }
+
+  private void initCategoryScores() {
+    categoryMaxScoreMap.put(CategoryEnum.API_STANDARDS.name(), 0.0);
+    categoryMaxScoreMap.put(CategoryEnum.EASE_OF_USE.name(), 0.0);
+    categoryMaxScoreMap.put(CategoryEnum.SECURITY_STANDARDS.name(), 0.0);
+    categoryMaxScoreMap.put(CategoryEnum.PERFORMANCE_STANDARDS.name(), 0.0);
+
+    categoryActualScoreMap.put(CategoryEnum.API_STANDARDS.name(), 0.0);
+    categoryActualScoreMap.put(CategoryEnum.EASE_OF_USE.name(), 0.0);
+    categoryActualScoreMap.put(CategoryEnum.SECURITY_STANDARDS.name(), 0.0);
+    categoryActualScoreMap.put(CategoryEnum.PERFORMANCE_STANDARDS.name(), 0.0);
+
   }
 
   private void calculateCategoryScore(EvaluationResult result) {
@@ -62,11 +76,15 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
     CategoryEnum[] categories = CategoryEnum.values();
     double apiScore = 0;
     for (CategoryEnum category : categories) {
-      Double catMaxScore = categoryMaxScoreMap.get(category.name());
-      Double catActualScore = categoryActualScoreMap.get(category.name());
+      Double categoryMaxScore = categoryMaxScoreMap.get(category.name());
+      Double categoryActualScore = categoryActualScoreMap.get(category.name());
       DecimalFormat dec = new DecimalFormat("#0.00");
-      Double catScore = Double.parseDouble(dec.format(catActualScore / catMaxScore)) * 100;
-      apiScore += catScore;
+      if (categoryMaxScore > 0) {
+        Double categoryScore = Double.parseDouble(dec.format(categoryActualScore / categoryMaxScore)) * 100;
+        apiScore += categoryScore;
+      } else {
+        apiScore += 100;
+      }
     }
     apiScore = apiScore / categories.length;
     result.setScore(apiScore);
