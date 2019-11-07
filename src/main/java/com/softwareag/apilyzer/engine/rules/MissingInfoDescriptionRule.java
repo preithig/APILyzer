@@ -1,6 +1,7 @@
 package com.softwareag.apilyzer.engine.rules;
 
 import com.softwareag.apilyzer.api.RuleEnum;
+import com.softwareag.apilyzer.model.Issue;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import org.elasticsearch.common.Strings;
@@ -14,8 +15,10 @@ public class MissingInfoDescriptionRule extends MissingDescriptionRule {
     Info info = api.getInfo();
     if (Strings.isNullOrEmpty(info.getDescription())) {
       //issues.add(issuesUtil.createIssue(this, buildContext()));
-      issues.add(createIssue(buildContext()));
-      totalCount = 0;
+      Issue issue = createIssue(buildContext());
+      issue.setErrorInfo("Description is missing in the Info section");
+      issues.add(issue);
+      totalCount = 1;
     } else {
       totalCount = 1;
       successCount = 1;

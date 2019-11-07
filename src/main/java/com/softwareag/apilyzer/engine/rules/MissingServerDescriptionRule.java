@@ -1,6 +1,7 @@
 package com.softwareag.apilyzer.engine.rules;
 
 import com.softwareag.apilyzer.api.RuleEnum;
+import com.softwareag.apilyzer.model.Issue;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.servers.Server;
 import org.elasticsearch.common.Strings;
@@ -24,7 +25,10 @@ public class MissingServerDescriptionRule extends MissingDescriptionRule {
       successCount = totalCount - serverWithMissingDesc.size();
       for (Server server : serverWithMissingDesc) {
         //issues.add(issuesUtil.createIssue(this, buildContext(server)));
-        issues.add(createIssue(buildContext(server)));
+
+        Issue issue = createIssue(buildContext(server));
+        issue.setErrorInfo("Description is missing for the server url "+ server.getUrl());
+        issues.add(issue);
       }
     }
   }
