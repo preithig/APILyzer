@@ -74,7 +74,6 @@ public class MissingServerInformationRule extends AbstractRuleSpecification {
     Paths paths = api.getPaths();
     Set<String> keys = paths.keySet();
 
-    totalCount = keys.size();
     for (String path : keys) {
       PathItem pathItem = paths.get(path);
       if (pathItem.getServers() == null || pathItem.getServers().size() == 0) {
@@ -92,6 +91,7 @@ public class MissingServerInformationRule extends AbstractRuleSpecification {
           }
         }
       } else {
+        totalCount += 1;
         successCount += 1;
       }
 

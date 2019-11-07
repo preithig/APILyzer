@@ -79,7 +79,11 @@ public class EvaluationService {
 
   public List<EvaluationResult> history() {
     Iterable<EvaluationResult> evaluationResultIterable = evaluationResultRepository.findAll();
-    return StreamSupport.stream(evaluationResultIterable.spliterator(), false).collect(Collectors.toList());
+    List<EvaluationResult> evaluationResults = Lists.newArrayList();
+    StreamSupport.stream(evaluationResultIterable.spliterator(), false).forEach(evaluationResult -> {
+      evaluationResults.add(getEvaluationResult(evaluationResult.getId()));
+    });
+    return evaluationResults;
   }
 
   public EvaluationResult findById(String id) {
