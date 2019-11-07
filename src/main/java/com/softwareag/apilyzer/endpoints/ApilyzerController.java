@@ -78,7 +78,7 @@ public class ApilyzerController {
       APILyzerReport report = new APILyzerReport(result.getCategories());
       byte[] content = report.export();
       return ResponseEntity.ok()
-          .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Api_Analysis_" + "test" + ".pdf")
+          .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Api_Analysis_" + result.getApiName() + ".pdf")
           .contentLength(content.length)
           .contentType(MediaType.parseMediaType("application/octet-stream"))
           .body(content);
