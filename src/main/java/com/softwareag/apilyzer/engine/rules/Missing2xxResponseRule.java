@@ -6,11 +6,15 @@ import com.softwareag.apilyzer.api.SeverityEnum;
 import com.softwareag.apilyzer.api.SubCategoryEnum;
 import com.softwareag.apilyzer.model.Issue;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.servers.Server;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 public class Missing2xxResponseRule extends AbstractRuleSpecification {
@@ -57,20 +61,32 @@ public class Missing2xxResponseRule extends AbstractRuleSpecification {
 
   @Override
   public void execute(OpenAPI api) {
-    List<Server> servers = api.getServers();
-    totalCount = servers.size();
-    List<Server> httpServers = servers.stream().filter(server -> server.getUrl().split(":")[0].equals("http")).collect(Collectors.toList());
-    successCount = totalCount - httpServers.size();
-    for (Server server : httpServers) {
-      //issues.add(issuesUtil.createIssue(this, buildContext(server)));
-      issues.add(createIssue(buildContext(server)));
+    Set<String> paths = api.getPaths().keySet();
+    for (String path : paths) {
+      AtomicBoolean positiveStatusCode = new AtomicBoolean(false);
+      List<Operation> operations = api.getPaths().get(path).readOperations();
+      totalCount += operations.size();
+      for (Operation op : operations) {
+        Set<String> statusCodes = op.getResponses().keySet();
+        for (String status : statusCodes) {
+          if (status.startsWith("2")) {
+            successCount += 1;
+            positiveStatusCode.set(true);
+            break;
+          }
+        }
+        if (!positiveStatusCode.get()) {
+          issues.add(createIssue(buildContext(path, op)));
+        }
+      }
     }
   }
 
-  private Map<String, String> buildContext(Server server) {
+  private Map<String, String> buildContext(String path, Operation op) {
     Map<String, String> context = new HashMap<>();
-    context.put("rulename", RuleEnum.SECURITY_SCHEME.name());
-    context.put("rulepath", server.getUrl());
+    context.put("rulename", RuleEnum.RESPONSE_DETAILS.name());
+    context.put("rulepath", path);
+    context.put("operationId",op.getOperationId());
     return context;
   }
 
