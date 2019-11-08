@@ -124,11 +124,14 @@ public class APILyzerReport {
   private void write() throws DocumentException {
     firstPage();
     for (int cIndex = 0; cIndex < categories.size(); cIndex++) {
+      Phrase phrase;
       Category category = this.categories.get(cIndex);
-      Phrase phrase = new Phrase(category.getName(), categoryFont);
-      doc.add(phrase);
-      doc.add(Chunk.NEWLINE);
-      doc.add(Chunk.NEWLINE);
+      if (category.getSubCategories().size() > 0) {
+        phrase = new Phrase(category.getName(), categoryFont);
+        doc.add(phrase);
+        doc.add(Chunk.NEWLINE);
+        doc.add(Chunk.NEWLINE);
+      }
       for (int sc_Index = 0; sc_Index < category.getSubCategories().size(); sc_Index++) {
         SubCategory subCategory = category.getSubCategories().get(sc_Index);
         phrase = new Phrase(subCategory.getName(), subCategoryFont);
