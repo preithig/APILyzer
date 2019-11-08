@@ -51,9 +51,7 @@ public class ApilyzerController {
       EvaluationResult evaluationResult = manager.evaluate(json);
       return new ResponseEntity<>(evaluationResult, HttpStatus.OK);
 
-    } catch (IOException e) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-    } catch (NotValidAPIException e) {
+    } catch (IOException | NotValidAPIException e) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
