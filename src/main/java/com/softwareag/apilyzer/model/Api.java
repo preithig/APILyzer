@@ -11,7 +11,7 @@ public class Api {
   @Id
   String id;
 
-  @Field(type = FieldType.Text)
+  @Field(type = FieldType.Text, index = false)
   String api;
 
   @Field(type = FieldType.Keyword)
