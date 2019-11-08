@@ -3,6 +3,7 @@ package com.softwareag.apilyzer.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softwareag.apilyzer.model.Api;
 import com.softwareag.apilyzer.repository.ApiRepository;
+import io.swagger.util.Json;
 import io.swagger.v3.oas.models.OpenAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,7 @@ public class ApiService {
 
   public Api save(OpenAPI openAPI, String evaluationId) throws IOException {
     Api api = new Api();
-    api.setApi(new ObjectMapper().writeValueAsString(openAPI));
+    api.setApi(Json.pretty(openAPI));
     api.setApiName(openAPI.getInfo().getTitle());
     api.setEvaluationId(evaluationId);
     return apiRepository.save(api);
