@@ -8,9 +8,13 @@ import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.function.Predicate;
+
+import static java.util.stream.Collectors.toList;
 
 public class Missing2xxResponseRuleFix implements IRuleFix {
 
@@ -20,9 +24,26 @@ public class Missing2xxResponseRuleFix implements IRuleFix {
     ApiResponse response = new ApiResponse();
     response.setDescription(data.getDescription());
     PathItem pathItem = openAPI.getPaths().get(context.get("rulepath"));
-    List<Operation> operations = pathItem.readOperations();
-    List<Operation> targetOperation = operations.stream().filter(op -> op.getOperationId().equals(context.get("operationId"))).collect(Collectors.toList());
-    targetOperation.get(0).getResponses().addApiResponse(data.getResponseStatusCode(), response);
+    List<Map.Entry<String, Operation>> operations = getOperations(pathItem);
+    Optional<Map.Entry<String, Operation>> operationOptional = operations.stream().filter(op -> op.getKey().equals(context.get("operationId"))).findAny();
+    operationOptional.get().getValue().getResponses().addApiResponse(data.getResponseStatusCode(), response);
     return openAPI;
+  }
+
+  static List<Map.Entry<String, Operation>> getOperations(PathItem p) {
+    Predicate<Map.Entry<String, Operation>> nonEmptyPredicate = (e) -> e.getValue() != null;
+
+    Map<String, Operation> opMap = new HashMap<>();
+    opMap.put("GET", p.getGet());
+    opMap.put("POST", p.getPost());
+    opMap.put("PUT", p.getPut());
+    opMap.put("DELETE", p.getDelete());
+    opMap.put("PATCH", p.getPatch());
+    opMap.put("HEAD", p.getHead());
+    opMap.put("OPTIONS", p.getOptions());
+    opMap.put("TRACE", p.getTrace());
+
+    return opMap.entrySet().stream().filter(nonEmptyPredicate)
+        .collect(toList());
   }
 }
