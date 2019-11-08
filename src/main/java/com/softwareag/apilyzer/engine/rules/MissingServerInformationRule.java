@@ -12,9 +12,6 @@ import io.swagger.v3.oas.models.Paths;
 import io.swagger.v3.oas.models.servers.Server;
 
 import java.util.*;
-import java.util.function.Predicate;
-
-import static java.util.stream.Collectors.toList;
 
 public class MissingServerInformationRule extends AbstractRuleSpecification {
   @Override
@@ -104,7 +101,7 @@ public class MissingServerInformationRule extends AbstractRuleSpecification {
   private Map<String, String> buildContext(String path, String operationId, Operation operation) {
     Map<String, String> context = new HashMap<>();
     context.put("rulename", RuleEnum.MISSING_SERVER_INFORMATION.name());
-    context.put("path", path);
+    context.put("rulepath", path);
     context.put("operationId", operationId);
     return context;
   }
