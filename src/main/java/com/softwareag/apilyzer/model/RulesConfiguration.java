@@ -6,7 +6,7 @@ public class RulesConfiguration {
 
   private RuleEnum ruleName;
 
-  private boolean status;
+  private boolean enabled;
 
   public RuleEnum getRuleName() {
     return ruleName;
@@ -16,11 +16,11 @@ public class RulesConfiguration {
     this.ruleName = ruleName;
   }
 
-  public boolean isStatus() {
-    return status;
+  public boolean isEnabled() {
+    return enabled;
   }
 
-  public void setStatus(boolean status) {
-    this.status = status;
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
   }
 }

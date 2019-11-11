@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import java.util.Date;
 import java.util.List;
 
 @Document(indexName = "rules", type = "default")
@@ -17,6 +19,9 @@ public class Rules {
   @Field(index = false)
   private List<RulesConfiguration> rules;
 
+  @Field(type = FieldType.Date)
+  private Date creationDate;
+
   public Rules() {
   }
 
@@ -28,5 +33,11 @@ public class Rules {
     this.rules = rules;
   }
 
+  public Date getCreationDate() {
+    return creationDate;
+  }
 
+  public void setCreationDate(Date creationDate) {
+    this.creationDate = creationDate;
+  }
 }

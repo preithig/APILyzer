@@ -21,7 +21,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -92,14 +94,22 @@ public class ApilyzerController {
       for (RuleEnum ruleSet : ruleSets) {
         RulesConfiguration rulesConfiguration = new RulesConfiguration();
         rulesConfiguration.setRuleName(ruleSet);
-        rulesConfiguration.setStatus(true);
+        rulesConfiguration.setEnabled(true);
         rulesConfigurationList.add(rulesConfiguration);
       }
       rules.setRules(rulesConfigurationList);
     }
+    rules.setCreationDate(new Date());
     rules = rulesRepository.save(rules);
     return new ResponseEntity<>(rules, HttpStatus.OK);
+  }
 
+  @GetMapping("/rules")
+  public Rules getRules() {
+    Instant instant = Instant.now();
+    long timeStampMillis = instant.toEpochMilli();
+    List<Rules> rulesList = rulesRepository.findByCreationDateIsLessThanEqualOrderByCreationDateDesc(timeStampMillis);
+    return rulesList.get(0);
   }
 
   @GetMapping("{id}/report")
