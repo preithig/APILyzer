@@ -1,12 +1,12 @@
 package com.softwareag.apilyzer.endpoints;
 
 import com.itextpdf.text.DocumentException;
+import com.softwareag.apilyzer.api.RuleEnum;
 import com.softwareag.apilyzer.exception.NotValidAPIException;
 import com.softwareag.apilyzer.manager.ApilyzerManager;
-import com.softwareag.apilyzer.model.Api;
-import com.softwareag.apilyzer.model.EvaluationResult;
-import com.softwareag.apilyzer.model.FixData;
+import com.softwareag.apilyzer.model.*;
 import com.softwareag.apilyzer.report.APILyzerReport;
+import com.softwareag.apilyzer.repository.RulesRepository;
 import com.softwareag.apilyzer.service.EvaluationService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -31,6 +32,8 @@ public class ApilyzerController {
 
   private EvaluationService evaluationService;
 
+  private RulesRepository rulesRepository;
+
   @Autowired
   public void setManager(ApilyzerManager manager) {
     this.manager = manager;
@@ -39,6 +42,11 @@ public class ApilyzerController {
   @Autowired
   public void setEvaluationService(EvaluationService evaluationService) {
     this.evaluationService = evaluationService;
+  }
+
+  @Autowired
+  public void setRulesRepository(RulesRepository rulesRepository) {
+    this.rulesRepository = rulesRepository;
   }
 
   @PostMapping("/evaluate")
@@ -64,7 +72,6 @@ public class ApilyzerController {
 
   @PostMapping("/evaluations/{evaluationId}/issues/{issueId}/fix")
   public ResponseEntity<EvaluationResult> fix(@PathVariable String evaluationId, @PathVariable String issueId, @RequestBody FixData fixData) {
-
     try {
       EvaluationResult evaluationResult = manager.fix(evaluationId, issueId, fixData);
       return new ResponseEntity<>(evaluationResult, HttpStatus.OK);
@@ -72,6 +79,26 @@ public class ApilyzerController {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 
     }
+  }
+
+  @PostMapping("/rules")
+  public ResponseEntity<Rules> createRules(@RequestBody(required = false) List<RulesConfiguration> rulesConfigurations) {
+    Rules rules = new Rules();
+    if (rulesConfigurations != null) {
+      rules.setRules(rulesConfigurations);
+    } else {
+      List<RulesConfiguration> rulesConfigurationList = new ArrayList<>();
+      RuleEnum[] ruleSets = RuleEnum.values();
+      for (RuleEnum ruleSet : ruleSets) {
+        RulesConfiguration rulesConfiguration = new RulesConfiguration();
+        rulesConfiguration.setRuleName(ruleSet);
+        rulesConfiguration.setStatus(true);
+        rulesConfigurationList.add(rulesConfiguration);
+      }
+      rules.setRules(rulesConfigurationList);
+    }
+    rules = rulesRepository.save(rules);
+    return new ResponseEntity<>(rules, HttpStatus.OK);
 
   }
 

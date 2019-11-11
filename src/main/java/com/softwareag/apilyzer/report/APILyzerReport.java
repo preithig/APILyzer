@@ -22,7 +22,7 @@ public class APILyzerReport {
 
   private Document doc;
   private ByteArrayOutputStream b;
-  private static Font reportTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 20, Font.BOLD);
+  private static Font reportTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 22, Font.BOLD);
   private static Font categoryFont = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
   private static Font fontBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
   private static Font subCategoryFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC);
@@ -80,12 +80,11 @@ public class APILyzerReport {
   }
 
   private void firstPage() {
-    PdfPTable table = new PdfPTable(2);
+    PdfPTable table = new PdfPTable(1);
     try {
-      table.setWidthPercentage(50);
+      table.setWidthPercentage(60);
       float sideLength = PageSize.A4.rotate().getWidth() * 1 / 2;
-      table.setWidths(new float[]{sideLength * 5 / 10, sideLength * 5 / 10});
-      table.addCell(Objects.requireNonNull(getLogo()));
+      table.setWidths(new float[]{sideLength});
       table.addCell(getTitle());
       table.setHorizontalAlignment(Element.ALIGN_CENTER);
       doc.add(table);
@@ -95,28 +94,14 @@ public class APILyzerReport {
     }
   }
 
-  private PdfPCell getLogo() {
-    try {
-      Image image = Image.getInstance("SAG.png");
-      PdfPCell cell = new PdfPCell(image, true);
-      cell.setBorder(Rectangle.NO_BORDER);
-      cell.setPaddingTop(PageSize.A4.rotate().getHeight() / 4);
-      cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-      return cell;
-    } catch (BadElementException | IOException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
-
   private PdfPCell getTitle() {
     Paragraph paragraph = new Paragraph("API Analysis Report", reportTitleFont);
-    paragraph.setSpacingBefore(8);
-    paragraph.setSpacingAfter(8);
+    paragraph.setSpacingBefore(10);
+    paragraph.setSpacingAfter(10);
     PdfPCell cell = new PdfPCell(paragraph);
     cell.setBorder(Rectangle.NO_BORDER);
-    cell.setPaddingTop(PageSize.A4.rotate().getHeight() / 4);
-    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+    cell.setPaddingTop(200);
+    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
     cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
     return cell;
   }
