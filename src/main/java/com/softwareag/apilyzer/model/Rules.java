@@ -16,7 +16,7 @@ public class Rules {
   @Id
   private String id;
 
-  @Field(index = false)
+  @Field(type = FieldType.Nested, index = false)
   private List<RulesConfiguration> rules;
 
   @Field(type = FieldType.Date)
