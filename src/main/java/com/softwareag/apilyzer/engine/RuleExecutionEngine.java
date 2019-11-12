@@ -27,6 +27,8 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
     specs.add(new MissingServerDescriptionRule());
     specs.add(new Missing2xxResponseRule());
     specs.add(new MissingServerInformationRule());
+    specs.add(new MissingRequestBodyExampleRule());
+    specs.add(new MissingResponseExampleRule());
 
     return specs;
   }
@@ -67,8 +69,9 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
       double max = categoryMaxScoreMap.get(category.getName());
       double actual = categoryActualScoreMap.get(category.getName());
       DecimalFormat dec = new DecimalFormat("#0.00");
-      if(max > 0.0)
+      if (max > 0.0) {
         category.setScore(Double.parseDouble(dec.format(actual / max)) * 100);
+      }
     }
   }
 
