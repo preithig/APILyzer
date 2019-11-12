@@ -2,41 +2,25 @@ package com.softwareag.apilyzer.engine;
 
 import com.softwareag.apilyzer.api.IRuleSpecification;
 import com.softwareag.apilyzer.engine.rules.*;
-import org.springframework.stereotype.Component;
 
-@Component
 public class RuleFactory {
-
-  private SecuritySchemeRule securitySchemeRule = new SecuritySchemeRule();
-
-  private MissingInfoDescriptionRule missingInfoDescriptionRule = new MissingInfoDescriptionRule();
-
-  private MissingServerDescriptionRule missingServerDescriptionRule = new MissingServerDescriptionRule();
-
-  private Missing2xxResponseRule missing2xxResponseRule = new Missing2xxResponseRule();
-
-  private MissingServerInformationRule missingServerInformationRule = new MissingServerInformationRule();
-
-  private MissingRequestBodyExampleRule missingRequestBodyExampleRule = new MissingRequestBodyExampleRule();
-
-  private MissingResponseExampleRule missingResponseExampleRule = new MissingResponseExampleRule();
 
   public IRuleSpecification resolveRule(String ruleName) {
     switch (ruleName) {
       case "MISSING_INFO_DESC":
-        return missingInfoDescriptionRule;
+        return new MissingInfoDescriptionRule();
       case "MISSING_SERVER_DESC":
-        return missingServerDescriptionRule;
+        return new MissingServerDescriptionRule();
       case "HTTP_SECURITY_SCHEME":
-        return securitySchemeRule;
+        return new SecuritySchemeRule();
       case "MISSING_SERVER_INFORMATION":
-        return missingServerInformationRule;
+        return new MissingServerInformationRule();
       case "OPERATION_2XX_RESPONSE":
-        return missing2xxResponseRule;
+        return new Missing2xxResponseRule();
       case "MISSING_REQUESTBODY_EXAMPLE":
-        return missingRequestBodyExampleRule;
+        return new MissingRequestBodyExampleRule();
       case "MISSING_RESPONSE_EXAMPLE":
-        return missingResponseExampleRule;
+        return new MissingResponseExampleRule();
       default:
         throw new RuntimeException("Unknown rule");
     }

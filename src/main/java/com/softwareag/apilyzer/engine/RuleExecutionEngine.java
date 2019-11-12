@@ -24,16 +24,11 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
 
   private ApilyzerManager manager;
 
-  private RuleFactory ruleFactory;
+  private RuleFactory ruleFactory = new RuleFactory();
 
   @Autowired
   public void setManager(ApilyzerManager manager) {
     this.manager = manager;
-  }
-
-  @Autowired
-  public void setRuleFactory(RuleFactory ruleFactory) {
-    this.ruleFactory = ruleFactory;
   }
 
   @Override
