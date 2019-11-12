@@ -83,24 +83,10 @@ public class ApilyzerController {
   }
 
   @PostMapping("/rules")
-  public ResponseEntity<Rules> createRules(@RequestBody(required = false) Rules rulesConfigurations) {
-    Rules rules = new Rules();
-    if (rulesConfigurations != null) {
-      rules.setRules(rulesConfigurations.getRules());
-    } else {
-      List<RulesConfiguration> rulesConfigurationList = new ArrayList<>();
-      RuleEnum[] ruleSets = RuleEnum.values();
-      for (RuleEnum ruleSet : ruleSets) {
-        RulesConfiguration rulesConfiguration = new RulesConfiguration();
-        rulesConfiguration.setRuleName(ruleSet.getRulename());
-        rulesConfiguration.setEnabled(true);
-        rulesConfigurationList.add(rulesConfiguration);
-      }
-      rules.setRules(rulesConfigurationList);
-    }
-    rules.setCreationDate(new Date());
-    rules = rulesRepository.save(rules);
-    return new ResponseEntity<>(rules, HttpStatus.OK);
+  public ResponseEntity<Rules> createRules(@RequestBody Rules rulesConfigurations) {
+    rulesConfigurations.setCreationDate(new Date());
+    rulesConfigurations = rulesRepository.save(rulesConfigurations);
+    return new ResponseEntity<>(rulesConfigurations, HttpStatus.OK);
   }
 
   @GetMapping("/rules")
