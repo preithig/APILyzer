@@ -21,7 +21,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -84,16 +83,16 @@ public class ApilyzerController {
   }
 
   @PostMapping("/rules")
-  public ResponseEntity<Rules> createRules(@RequestBody(required = false) List<RulesConfiguration> rulesConfigurations) {
+  public ResponseEntity<Rules> createRules(@RequestBody(required = false) Rules rulesConfigurations) {
     Rules rules = new Rules();
     if (rulesConfigurations != null) {
-      rules.setRules(rulesConfigurations);
+      rules.setRules(rulesConfigurations.getRules());
     } else {
       List<RulesConfiguration> rulesConfigurationList = new ArrayList<>();
       RuleEnum[] ruleSets = RuleEnum.values();
       for (RuleEnum ruleSet : ruleSets) {
         RulesConfiguration rulesConfiguration = new RulesConfiguration();
-        rulesConfiguration.setRuleName(ruleSet);
+        rulesConfiguration.setRuleName(ruleSet.getRulename());
         rulesConfiguration.setEnabled(true);
         rulesConfigurationList.add(rulesConfiguration);
       }
@@ -106,10 +105,7 @@ public class ApilyzerController {
 
   @GetMapping("/rules")
   public Rules getRules() {
-    Instant instant = Instant.now();
-    long timeStampMillis = instant.toEpochMilli();
-    List<Rules> rulesList = rulesRepository.findByCreationDateIsLessThanEqualOrderByCreationDateDesc(timeStampMillis);
-    return rulesList.get(0);
+    return manager.getRules();
   }
 
   @GetMapping("{id}/report")

@@ -23,6 +23,7 @@ public class EvaluationService {
 
   private EvaluationResultRepository evaluationResultRepository;
   private IssuesRepository issuesRepository;
+  private RuleExecutionEngine ruleExecutionEngine;
 
   @Autowired
   public void setIssuesRepository(IssuesRepository issuesRepository) {
@@ -34,8 +35,13 @@ public class EvaluationService {
     this.evaluationResultRepository = evaluationResultRepository;
   }
 
+  @Autowired
+  public void setRuleExecutionEngine(RuleExecutionEngine ruleExecutionEngine) {
+    this.ruleExecutionEngine = ruleExecutionEngine;
+  }
+
   public EvaluationResult evaluate(OpenAPI openAPI) {
-    EvaluationResult evalutionResult = new RuleExecutionEngine().evaluate(openAPI);
+    EvaluationResult evalutionResult = ruleExecutionEngine.evaluate(openAPI);
 
     evalutionResult.getCategories().stream().forEach(category -> {
       category.getSubCategories().stream().forEach(subCategory -> {

@@ -1,18 +1,16 @@
 package com.softwareag.apilyzer.model;
 
-import com.softwareag.apilyzer.api.RuleEnum;
-
 public class RulesConfiguration {
 
-  private RuleEnum ruleName;
+  private String ruleName;
 
   private boolean enabled;
 
-  public RuleEnum getRuleName() {
+  public String getRuleName() {
     return ruleName;
   }
 
-  public void setRuleName(RuleEnum ruleName) {
+  public void setRuleName(String ruleName) {
     this.ruleName = ruleName;
   }
 
