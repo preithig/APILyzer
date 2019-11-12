@@ -48,7 +48,9 @@ public class APILyzerReport {
     this.b = new ByteArrayOutputStream();
     doc = new Document();
     try {
-      PdfWriter.getInstance(doc, b);
+      PdfWriter writer = PdfWriter.getInstance(doc, b);
+      ReportPageHandler reportPageHandler = new ReportPageHandler();
+      writer.setPageEvent(reportPageHandler);
     } catch (DocumentException e) {
       e.printStackTrace();
       throw new RuntimeException(e);
