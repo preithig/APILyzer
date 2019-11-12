@@ -9,7 +9,6 @@ import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
-import io.swagger.v3.oas.models.servers.Server;
 
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +46,8 @@ public class MissingResponseExampleRule extends MissingExampleRule {
                       Object example = mediaType.getExample();
                       if (example == null) {
                         //create issue
+                        createIssue(buildContext(path, operationEntry.getKey(), key, contentkey));
+
                       }
                     }
                   }
@@ -64,12 +65,17 @@ public class MissingResponseExampleRule extends MissingExampleRule {
 
   }
 
-  private Map<String, String> buildContext(Server server) {
+
+  private Map<String, String> buildContext(String path, String operationKey, String responseKey, String contentkey) {
     Map<String, String> context = new HashMap<>();
-    context.put("rulename", RuleEnum.MISSING_RESPONSE_EXAMPLE.name());
-    context.put("rulepath", server.getUrl());
+    context.put("rulename", RuleEnum.MISSING_REQUESTBODY_EXAMPLE.name());
+    context.put("rulepath", path);
+    context.put("operationId", operationKey);
+    context.put("responseKey", responseKey);
+    context.put("contentkey", contentkey);
     return context;
   }
+
 
   @Override
   public String getRuleName() {
