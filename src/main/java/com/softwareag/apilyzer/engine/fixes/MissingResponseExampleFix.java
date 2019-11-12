@@ -13,11 +13,7 @@ import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class MissingResponseExampleFix implements IRuleFix {
 
@@ -30,38 +26,32 @@ public class MissingResponseExampleFix implements IRuleFix {
     ApiResponse apiResponse = operationOptional.get().getValue().getResponses().get(context.get("responseKey"));
     MediaType mediaType = apiResponse.getContent().get(context.get("contentKey"));
 
-    try {
-      if (context.get("contentKey").equals("application/json")) {
+    if (context.get("contentKey").equals("application/json")) {
 
-        Schema schema = mediaType.getSchema();
-        String schemaType = schema.getType();
+      Schema schema = mediaType.getSchema();
+      String schemaType = schema.getType();
 
-        if (schemaType.equalsIgnoreCase("string")) {
+      if (schemaType.equalsIgnoreCase("string")) {
 
-        } else {
-          Map<String, Schema> stringSchemaMap = schema.getProperties();
-          Set<String> keys = stringSchemaMap.keySet();
-          JsonNode jsonNode = new ObjectMapper().createObjectNode();
-          for (String key : keys) {
-            Schema s = stringSchemaMap.get(key);
+      } else {
+        Map<String, Schema> stringSchemaMap = schema.getProperties();
+        Set<String> keys = stringSchemaMap.keySet();
+        JsonNode jsonNode = new ObjectMapper().createObjectNode();
+        for (String key : keys) {
+          Schema s = stringSchemaMap.get(key);
 
-            if (s.getType().equalsIgnoreCase("string") && s.getPattern() != null) {
-              ((ObjectNode) jsonNode).put(key, "123");
-            } else if (s.getType().equalsIgnoreCase("Integer") && s.getMinimum() != null
-                && s.getMaximum() != null) {
-              ((ObjectNode) jsonNode).put(key, (int) (Math.random() * (s.getMaximum().intValue() - s.getMinimum().intValue())) + s.getMinimum().intValue());
-            }
+          if (s.getType().equalsIgnoreCase("string") &&
+              "([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})".equals(s.getPattern())) {
+            ((ObjectNode) jsonNode).put(key, UUID.randomUUID().toString());
+          } else if (s.getType().equalsIgnoreCase("Integer") && s.getMinimum() != null
+              && s.getMaximum() != null) {
+            ((ObjectNode) jsonNode).put(key, (int) (Math.random() * (s.getMaximum().intValue() - s.getMinimum().intValue())) + s.getMinimum().intValue());
           }
-
-          mediaType.setExample(new ObjectMapper().writeValueAsString(jsonNode));
         }
 
+        mediaType.setExample(jsonNode.toPrettyString());
       }
-    } catch (IOException e) {
-      e.printStackTrace();
-      ;
     }
-
     return openAPI;
   }
 }
