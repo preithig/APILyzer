@@ -4,32 +4,44 @@ import com.softwareag.apilyzer.api.CategoryEnum;
 import com.softwareag.apilyzer.api.IRuleExecutionEngine;
 import com.softwareag.apilyzer.api.IRuleSpecification;
 import com.softwareag.apilyzer.api.SeverityEnum;
-import com.softwareag.apilyzer.engine.rules.*;
+import com.softwareag.apilyzer.manager.ApilyzerManager;
 import com.softwareag.apilyzer.model.Category;
 import com.softwareag.apilyzer.model.EvaluationResult;
+import com.softwareag.apilyzer.model.RulesConfiguration;
 import com.softwareag.apilyzer.model.SubCategory;
 import io.swagger.v3.oas.models.OpenAPI;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.text.DecimalFormat;
 import java.util.*;
 
+@Component
 public class RuleExecutionEngine implements IRuleExecutionEngine {
 
   private Map<String, Double> categoryMaxScoreMap = new HashMap<>();
   private Map<String, Double> categoryActualScoreMap = new HashMap<>();
 
+  private ApilyzerManager manager;
+
+  private RuleFactory ruleFactory = new RuleFactory();
+
+  @Autowired
+  public void setManager(ApilyzerManager manager) {
+    this.manager = manager;
+  }
+
   @Override
   public List<IRuleSpecification> getAllRules() {
     List<IRuleSpecification> specs = new ArrayList<>();
 
-    specs.add(new SecuritySchemeRule());
-    specs.add(new MissingInfoDescriptionRule());
-    specs.add(new MissingServerDescriptionRule());
-    specs.add(new Missing2xxResponseRule());
-    specs.add(new MissingServerInformationRule());
-    specs.add(new MissingRequestBodyExampleRule());
-    specs.add(new MissingResponseExampleRule());
-
+    List<RulesConfiguration> rules = manager.getRules().getRules();
+    for (RulesConfiguration rule : rules) {
+      String ruleName = rule.getRuleName();
+      if (rule.isEnabled()) {
+        specs.add(ruleFactory.resolveRule(ruleName));
+      }
+    }
     return specs;
   }
 
@@ -94,7 +106,8 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
   }
 
   private void evaluateRuleSpecification(OpenAPI openAPI, EvaluationResult result) {
-    for (IRuleSpecification rule : getAllRules()) {
+    List<IRuleSpecification> rules = getAllRules();
+    for (IRuleSpecification rule : rules) {
 
       rule.execute(openAPI);
 
