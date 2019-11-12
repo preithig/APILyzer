@@ -43,7 +43,7 @@ public class MissingRequestBodyExampleRule extends MissingExampleRule {
                     Object example = mediaType.getExample();
                     if (example == null) {
                       //path, operationentry.getkey, contentkey
-                      createIssue(buildContext(path, operationEntry.getKey(), contentkey));
+                      issues.add(createIssue(buildContext(path, operationEntry.getKey(), contentkey)));
                     } else {
                       successCount += 1;
                     }

@@ -20,6 +20,8 @@ public class FixUtil {
         return new Missing2xxResponseRuleFix().fix(issue, openAPI, data);
       case MISSING_SERVER_INFORMATION:
         return new MissingServerInformationFix().fix(issue, openAPI, data);
+      case MISSING_RESPONSE_EXAMPLE:
+        return new MissingResponseExampleFix().fix(issue, openAPI, data);
     }
     return openAPI;
   }

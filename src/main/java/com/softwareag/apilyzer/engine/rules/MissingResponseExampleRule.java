@@ -46,7 +46,7 @@ public class MissingResponseExampleRule extends MissingExampleRule {
                       Object example = mediaType.getExample();
                       if (example == null) {
                         //create issue
-                        createIssue(buildContext(path, operationEntry.getKey(), key, contentkey));
+                        issues.add(createIssue(buildContext(path, operationEntry.getKey(), key, contentkey)));
 
                       }
                     }
@@ -72,7 +72,7 @@ public class MissingResponseExampleRule extends MissingExampleRule {
     context.put("rulepath", path);
     context.put("operationId", operationKey);
     context.put("responseKey", responseKey);
-    context.put("contentkey", contentkey);
+    context.put("contentKey", contentkey);
     return context;
   }
 
