@@ -48,6 +48,8 @@ public class MissingResponseExampleRule extends MissingExampleRule {
                         //create issue
                         issues.add(createIssue(buildContext(path, operationEntry.getKey(), key, contentkey)));
 
+                      } else {
+                        successCount += 1;
                       }
                     }
                   }
