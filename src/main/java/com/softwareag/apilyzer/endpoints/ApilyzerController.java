@@ -11,6 +11,7 @@ import com.softwareag.apilyzer.report.APILyzerReport;
 import com.softwareag.apilyzer.repository.RulesRepository;
 import com.softwareag.apilyzer.service.EvaluationService;
 import org.apache.commons.io.IOUtils;
+import org.elasticsearch.common.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -77,7 +78,9 @@ public class ApilyzerController {
   @PostMapping("/evaluations/{evaluationId}/issues/{issueId}/fix")
   public ResponseEntity<EvaluationResult> fix(@PathVariable String evaluationId, @PathVariable String issueId, @RequestBody FixData fixData) {
     try {
-      new URL(fixData.getUrl());
+      if (!Strings.isNullOrEmpty(fixData.getUrl())) {
+        new URL(fixData.getUrl());
+      }
       EvaluationResult evaluationResult = manager.fix(evaluationId, issueId, fixData);
       return new ResponseEntity<>(evaluationResult, HttpStatus.OK);
     } catch (Exception e) {
