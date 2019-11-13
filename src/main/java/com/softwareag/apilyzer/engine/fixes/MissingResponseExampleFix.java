@@ -7,6 +7,7 @@ import com.softwareag.apilyzer.model.Issue;
 import io.apptik.json.JsonElement;
 import io.apptik.json.generator.JsonGenerator;
 import io.apptik.json.schema.SchemaV4;
+import io.swagger.util.Json;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
@@ -38,7 +39,7 @@ public class MissingResponseExampleFix implements IRuleFix {
 
         io.apptik.json.schema.Schema ss = new SchemaV4().wrap(JsonElement.readFrom(new ObjectMapper().writeValueAsString(schema)).asJsonObject());
         JsonElement elem = new JsonGenerator(ss, null).generate();
-        mediaType.setExample(elem.toString());
+        mediaType.setExample(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(elem));
 
      /*   if (schemaType.equalsIgnoreCase("string")) {
 
