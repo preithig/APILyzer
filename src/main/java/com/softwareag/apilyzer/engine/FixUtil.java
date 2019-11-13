@@ -22,7 +22,7 @@ public class FixUtil {
         return new MissingServerInformationFix().fix(issue, openAPI, data);
       case MISSING_RESPONSE_EXAMPLE:
         return new MissingResponseExampleFix().fix(issue, openAPI, data);
-      case MISSING_REQUESTBODY_EXAMPLE:
+      case MISSING_REQUEST_BODY_EXAMPLE:
         return new MissingRequestBodyExampleFix().fix(issue, openAPI, data);
     }
     return openAPI;

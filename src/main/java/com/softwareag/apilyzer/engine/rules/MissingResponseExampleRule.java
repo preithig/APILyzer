@@ -72,7 +72,7 @@ public class MissingResponseExampleRule extends MissingExampleRule {
 
   private Map<String, String> buildContext(String path, String operationKey, String responseKey, String contentkey) {
     Map<String, String> context = new HashMap<>();
-    context.put("rulename", RuleEnum.MISSING_REQUESTBODY_EXAMPLE.name());
+    context.put("rulename", RuleEnum.MISSING_REQUEST_BODY_EXAMPLE.name());
     context.put("rulepath", path);
     context.put("operationId", operationKey);
     context.put("responseKey", responseKey);
@@ -98,7 +98,7 @@ public class MissingResponseExampleRule extends MissingExampleRule {
 
   @Override
   public String getRemedy() {
-    return RuleEnum.MISSING_REQUESTBODY_EXAMPLE.getRemedy();
+    return RuleEnum.MISSING_REQUEST_BODY_EXAMPLE.getRemedy();
   }
 
   @Override

@@ -69,7 +69,7 @@ public class MissingRequestBodyExampleRule extends MissingExampleRule {
 
   private Map<String, String> buildContext(String path, String key, String contentkey) {
     Map<String, String> context = new HashMap<>();
-    context.put("rulename", RuleEnum.MISSING_REQUESTBODY_EXAMPLE.name());
+    context.put("rulename", RuleEnum.MISSING_REQUEST_BODY_EXAMPLE.name());
     context.put("rulepath", path);
     context.put("operationId", key);
     context.put("contentKey", contentkey);
@@ -79,22 +79,22 @@ public class MissingRequestBodyExampleRule extends MissingExampleRule {
 
   @Override
   public String getRuleName() {
-    return RuleEnum.MISSING_REQUESTBODY_EXAMPLE.getRulename();
+    return RuleEnum.MISSING_REQUEST_BODY_EXAMPLE.getRulename();
   }
 
   @Override
   public String getSummary() {
-    return RuleEnum.MISSING_REQUESTBODY_EXAMPLE.getSummary();
+    return RuleEnum.MISSING_REQUEST_BODY_EXAMPLE.getSummary();
   }
 
   @Override
   public String getDescription() {
-    return RuleEnum.MISSING_REQUESTBODY_EXAMPLE.getDescription();
+    return RuleEnum.MISSING_REQUEST_BODY_EXAMPLE.getDescription();
   }
 
   @Override
   public String getRemedy() {
-    return RuleEnum.MISSING_REQUESTBODY_EXAMPLE.getRemedy();
+    return RuleEnum.MISSING_REQUEST_BODY_EXAMPLE.getRemedy();
   }
 
   @Override

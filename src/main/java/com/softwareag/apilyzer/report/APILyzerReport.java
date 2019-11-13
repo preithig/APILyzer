@@ -130,14 +130,14 @@ public class APILyzerReport {
       Phrase phrase;
       Category category = this.categories.get(cIndex);
       if (category.getSubCategories().size() > 0) {
-        phrase = new Phrase(category.getName(), categoryFont);
+        phrase = new Phrase(category.getName().replace("_", " "), categoryFont);
         doc.add(phrase);
         doc.add(Chunk.NEWLINE);
         doc.add(Chunk.NEWLINE);
       }
       for (int sc_Index = 0; sc_Index < category.getSubCategories().size(); sc_Index++) {
         SubCategory subCategory = category.getSubCategories().get(sc_Index);
-        phrase = new Phrase(subCategory.getName(), subCategoryFont);
+        phrase = new Phrase(subCategory.getName().replace("_", " "), subCategoryFont);
         doc.add(phrase);
         createTable(subCategory.getIssueList());
         doc.add(Chunk.NEWLINE);
@@ -149,6 +149,7 @@ public class APILyzerReport {
     PdfPTable table = new PdfPTable(new float[]{1, 2, 3, 1});
     table.setHorizontalAlignment(Element.ALIGN_LEFT);
     table.setWidthPercentage(100);
+    table.setKeepTogether(true);
 
     writeHeader(table);
 
