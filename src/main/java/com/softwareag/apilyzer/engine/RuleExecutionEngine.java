@@ -67,12 +67,12 @@ public class RuleExecutionEngine implements IRuleExecutionEngine {
     categoryMaxScoreMap.put(CategoryEnum.API_STANDARDS.name(), 0.0);
     categoryMaxScoreMap.put(CategoryEnum.EASE_OF_USE.name(), 0.0);
     categoryMaxScoreMap.put(CategoryEnum.SECURITY_STANDARDS.name(), 0.0);
-    categoryMaxScoreMap.put(CategoryEnum.PERFORMANCE_STANDARDS.name(), 0.0);
+    //categoryMaxScoreMap.put(CategoryEnum.PERFORMANCE_STANDARDS.name(), 0.0);
 
     categoryActualScoreMap.put(CategoryEnum.API_STANDARDS.name(), 0.0);
     categoryActualScoreMap.put(CategoryEnum.EASE_OF_USE.name(), 0.0);
     categoryActualScoreMap.put(CategoryEnum.SECURITY_STANDARDS.name(), 0.0);
-    categoryActualScoreMap.put(CategoryEnum.PERFORMANCE_STANDARDS.name(), 0.0);
+    //categoryActualScoreMap.put(CategoryEnum.PERFORMANCE_STANDARDS.name(), 0.0);
 
   }
 
