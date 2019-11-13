@@ -1,6 +1,7 @@
 package com.softwareag.apilyzer.engine.rules;
 
 import com.softwareag.apilyzer.api.RuleEnum;
+import com.softwareag.apilyzer.model.Issue;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
@@ -46,8 +47,9 @@ public class MissingResponseExampleRule extends MissingExampleRule {
                       Object example = mediaType.getExample();
                       if (example == null) {
                         //create issue
-                        issues.add(createIssue(buildContext(path, operationEntry.getKey(), key, contentkey)));
-
+                        Issue issue = createIssue(buildContext(path, operationEntry.getKey(), key, contentkey));
+                        issue.setErrorInfo("- in response section of the path " + path + " for operation " + operationEntry.getKey());
+                        issues.add(issue);
                       } else {
                         successCount += 1;
                       }
