@@ -106,7 +106,7 @@ public class ApilyzerController {
   public ResponseEntity generateReport(@PathVariable String id) {
     EvaluationResult result = evaluationService.getEvaluationResult(id);
     try {
-      APILyzerReport report = new APILyzerReport(result.getCategories());
+      APILyzerReport report = new APILyzerReport(result);
       byte[] content = report.export();
       return ResponseEntity.ok()
           .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Api_Analysis_" + result.getApiName() + ".pdf")

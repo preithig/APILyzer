@@ -5,6 +5,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.softwareag.apilyzer.model.Category;
+import com.softwareag.apilyzer.model.EvaluationResult;
 import com.softwareag.apilyzer.model.Issue;
 import com.softwareag.apilyzer.model.SubCategory;
 import com.softwareag.apilyzer.repository.IssuesRepository;
@@ -12,20 +13,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.StreamSupport;
-
-import static java.util.stream.Collectors.toList;
 
 public class APILyzerReport {
 
   private Document doc;
   private ByteArrayOutputStream b;
-  private static Font reportTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 22, Font.BOLD);
+  private static Font reportTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 23, Font.BOLD);
   private static Font categoryFont = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
   private static Font fontBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
   private static Font subCategoryFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC);
+  private EvaluationResult result;
   private List<Category> categories;
   private IssuesRepository issuesRepository;
 
@@ -34,8 +34,9 @@ public class APILyzerReport {
     this.issuesRepository = issuesRepository;
   }
 
-  public APILyzerReport(List<Category> categories) throws DocumentException {
-    this.categories = categories;
+  public APILyzerReport(EvaluationResult result) throws DocumentException {
+    this.result = result;
+    this.categories = result.getCategories();
     init();
     addMetaData();
     doc.open();
@@ -88,6 +89,9 @@ public class APILyzerReport {
       float sideLength = PageSize.A4.rotate().getWidth() * 1 / 2;
       table.setWidths(new float[]{sideLength});
       table.addCell(getTitle());
+      table.addCell(getInfo("API Name: " + result.getApiName() + " (" + String.format("%.2f", result.getScore()) + "%)"));
+      DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+      table.addCell(getInfo("Evaluated On: " + dateFormat.format(result.getEvaluationDate())));
       table.setHorizontalAlignment(Element.ALIGN_CENTER);
       doc.add(table);
       doc.add(Chunk.NEXTPAGE);
@@ -103,6 +107,18 @@ public class APILyzerReport {
     PdfPCell cell = new PdfPCell(paragraph);
     cell.setBorder(Rectangle.NO_BORDER);
     cell.setPaddingTop(200);
+    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+    return cell;
+  }
+
+  private PdfPCell getInfo(String text) {
+    Paragraph paragraph = new Paragraph(text);
+    paragraph.setSpacingBefore(10);
+    paragraph.setSpacingAfter(10);
+    PdfPCell cell = new PdfPCell(paragraph);
+    cell.setBorder(Rectangle.NO_BORDER);
+    cell.setPaddingTop(10);
     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
     cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
     return cell;
