@@ -1,10 +1,12 @@
 package com.softwareag.apilyzer.endpoints;
 
 import com.itextpdf.text.DocumentException;
-import com.softwareag.apilyzer.api.RuleEnum;
 import com.softwareag.apilyzer.exception.NotValidAPIException;
 import com.softwareag.apilyzer.manager.ApilyzerManager;
-import com.softwareag.apilyzer.model.*;
+import com.softwareag.apilyzer.model.Api;
+import com.softwareag.apilyzer.model.EvaluationResult;
+import com.softwareag.apilyzer.model.FixData;
+import com.softwareag.apilyzer.model.Rules;
 import com.softwareag.apilyzer.report.APILyzerReport;
 import com.softwareag.apilyzer.repository.RulesRepository;
 import com.softwareag.apilyzer.service.EvaluationService;
@@ -20,8 +22,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -74,6 +76,7 @@ public class ApilyzerController {
   @PostMapping("/evaluations/{evaluationId}/issues/{issueId}/fix")
   public ResponseEntity<EvaluationResult> fix(@PathVariable String evaluationId, @PathVariable String issueId, @RequestBody FixData fixData) {
     try {
+      new URL(fixData.getUrl());
       EvaluationResult evaluationResult = manager.fix(evaluationId, issueId, fixData);
       return new ResponseEntity<>(evaluationResult, HttpStatus.OK);
     } catch (Exception e) {
