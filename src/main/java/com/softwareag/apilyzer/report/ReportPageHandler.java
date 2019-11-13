@@ -16,9 +16,9 @@ public class ReportPageHandler extends PdfPageEventHelper {
       Image image = Image.getInstance("powered_by.jpg");
       image.setAbsolutePosition(665,5);
       image.scalePercent(15f);
-      Image image1 = Image.getInstance("powered-By_SAG.png");
-      image1.scalePercent(55f);
-      image1.setAbsolutePosition(745, 20);
+      Image image1 = Image.getInstance("SAGHeaderLogo.png");
+      image1.scalePercent(40f);
+      image1.setAbsolutePosition(745, 15);
       writer.getDirectContent().addImage(image);
       writer.getDirectContent().addImage(image1);
     } catch (IOException | DocumentException e) {
