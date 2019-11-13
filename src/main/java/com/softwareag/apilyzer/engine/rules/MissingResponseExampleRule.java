@@ -48,7 +48,7 @@ public class MissingResponseExampleRule extends MissingExampleRule {
                       if (example == null) {
                         //create issue
                         Issue issue = createIssue(buildContext(path, operationEntry.getKey(), key, contentkey));
-                        issue.setErrorInfo("- in response section of the path " + path + " for operation " + operationEntry.getKey());
+                        issue.setErrorInfo(" in response section of the path " + path + " for operation " + operationEntry.getKey());
                         issues.add(issue);
                       } else {
                         successCount += 1;

@@ -45,7 +45,7 @@ public class MissingRequestBodyExampleRule extends MissingExampleRule {
                     if (example == null) {
                       //path, operationentry.getkey, contentkey
                       Issue issue  = createIssue(buildContext(path, operationEntry.getKey(), contentkey));
-                      issue.setErrorInfo("- in request body of the path "+ path + " for operation " + operationEntry.getKey());
+                      issue.setErrorInfo(" in request body of the path "+ path + " for operation " + operationEntry.getKey());
                       issues.add(issue);
                     } else {
                       successCount += 1;
