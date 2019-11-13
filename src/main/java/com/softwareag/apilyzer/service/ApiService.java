@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class ApiService {
@@ -23,6 +24,7 @@ public class ApiService {
 
   public Api save(OpenAPI openAPI, String evaluationId) throws IOException {
     Api api = new Api();
+    api.setId(UUID.randomUUID().toString());
     api.setApi(Json.pretty(openAPI));
     api.setApiName(openAPI.getInfo().getTitle());
     api.setEvaluationId(evaluationId);
