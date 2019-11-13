@@ -54,7 +54,7 @@ public class EvaluationResult {
     getCategories().add(new Category(CategoryEnum.API_STANDARDS.name(), 100));
     getCategories().add(new Category(CategoryEnum.EASE_OF_USE.name(), 100));
     getCategories().add(new Category(CategoryEnum.SECURITY_STANDARDS.name(), 100));
-    getCategories().add(new Category(CategoryEnum.PERFORMANCE_STANDARDS.name(), 100));
+    //getCategories().add(new Category(CategoryEnum.PERFORMANCE_STANDARDS.name(), 100));
   }
 
   public String getApiName() {

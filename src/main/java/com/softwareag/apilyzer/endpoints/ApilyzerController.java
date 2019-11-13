@@ -26,6 +26,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/rest")
@@ -87,6 +88,7 @@ public class ApilyzerController {
 
   @PostMapping("/rules")
   public ResponseEntity<Rules> createRules(@RequestBody Rules rulesConfigurations) {
+    rulesConfigurations.setId(UUID.randomUUID().toString());
     rulesConfigurations.setCreationDate(new Date());
     rulesConfigurations = rulesRepository.save(rulesConfigurations);
     return new ResponseEntity<>(rulesConfigurations, HttpStatus.OK);

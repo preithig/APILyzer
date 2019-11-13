@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -47,6 +48,7 @@ public class EvaluationService {
       category.getSubCategories().stream().forEach(subCategory -> {
         List<Issue> issueList = subCategory.getIssueList();
         for (Issue issue : issueList) {
+          issue.setId(UUID.randomUUID().toString());
           Issue issueSaved = issuesRepository.save(issue);
           subCategory.getIssues().add(issueSaved.getId());
         }
@@ -60,6 +62,7 @@ public class EvaluationService {
     });
 
     evalutionResult.setEvaluationDate(new Date());
+    evalutionResult.setId(UUID.randomUUID().toString());
     evalutionResult = evaluationResultRepository.save(evalutionResult);
 
     return getEvaluationResult(evalutionResult.getId());
