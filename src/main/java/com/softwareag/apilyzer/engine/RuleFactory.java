@@ -17,7 +17,7 @@ public class RuleFactory {
         return new MissingServerInformationRule();
       case "OPERATION_2XX_RESPONSE":
         return new Missing2xxResponseRule();
-      case "MISSING_REQUESTBODY_EXAMPLE":
+      case "MISSING_REQUEST_BODY_EXAMPLE":
         return new MissingRequestBodyExampleRule();
       case "MISSING_RESPONSE_EXAMPLE":
         return new MissingResponseExampleRule();

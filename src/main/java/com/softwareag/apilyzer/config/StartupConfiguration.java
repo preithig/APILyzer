@@ -58,6 +58,8 @@ public class StartupConfiguration {
       RulesConfiguration rulesConfiguration = new RulesConfiguration();
       rulesConfiguration.setRuleName(ruleSet.getRulename());
       rulesConfiguration.setEnabled(true);
+      rulesConfiguration.setCategory(ruleSet.getCategory());
+      rulesConfiguration.setSummary(ruleSet.getSummary());
       rulesConfigurationList.add(rulesConfiguration);
     }
     rules.setRules(rulesConfigurationList);
