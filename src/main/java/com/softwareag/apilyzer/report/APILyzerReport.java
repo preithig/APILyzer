@@ -1,16 +1,27 @@
 package com.softwareag.apilyzer.report;
 
+import com.itextpdf.awt.DefaultFontMapper;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.*;
+import com.itextpdf.text.pdf.draw.LineSeparator;
 import com.softwareag.apilyzer.model.Category;
 import com.softwareag.apilyzer.model.EvaluationResult;
 import com.softwareag.apilyzer.model.Issue;
 import com.softwareag.apilyzer.model.SubCategory;
 import com.softwareag.apilyzer.repository.IssuesRepository;
+import org.jfree.chart.ChartRenderingInfo;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.*;
+import org.jfree.data.Range;
+import org.jfree.data.general.DefaultValueDataset;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -21,6 +32,7 @@ public class APILyzerReport {
 
   private Document doc;
   private ByteArrayOutputStream b;
+  private PdfWriter writer;
   private static Font reportTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 23, Font.BOLD);
   private static Font categoryFont = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
   private static Font fontBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
@@ -49,7 +61,7 @@ public class APILyzerReport {
     this.b = new ByteArrayOutputStream();
     doc = new Document();
     try {
-      PdfWriter writer = PdfWriter.getInstance(doc, b);
+      writer = PdfWriter.getInstance(doc, b);
       ReportPageHandler reportPageHandler = new ReportPageHandler();
       writer.setPageEvent(reportPageHandler);
     } catch (DocumentException e) {
@@ -124,8 +136,138 @@ public class APILyzerReport {
     return cell;
   }
 
+  private void chartPage() {
+    try {
+      PdfPTable table = new PdfPTable(categories.size());
+      Paragraph paragraph = new Paragraph("API COMPLIANCE BY CATEGORY", fontBold);
+      paragraph.setSpacingBefore(8);
+      paragraph.setSpacingAfter(8);
+      doc.add(paragraph);
+      doc.add(new LineSeparator());
+      table.setHorizontalAlignment(Element.ALIGN_CENTER);
+      table.setWidthPercentage(100);
+      table.setSpacingBefore(75f);
+      table.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+      table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
+      table.getDefaultCell().setVerticalAlignment(Element.ALIGN_MIDDLE);
+      table.getDefaultCell().setPaddingBottom(12f);
+      table.setKeepTogether(true);
+      Font textFont = new Font(Font.FontFamily.HELVETICA, 15, Font.BOLD);
+
+      for (Category category : categories) {
+        JFreeChart chart = createChart(category.getScore());
+        Image image = drawChart(writer.getDirectContent(), chart);
+        table.addCell(image);
+      }
+
+      for (Category category : categories) {
+        table.addCell(new Phrase(category.getName(), textFont));
+      }
+
+      add(table);
+      doc.add(Chunk.NEXTPAGE);
+    } catch (DocumentException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private JFreeChart createChart(double score) {
+    DefaultValueDataset valueDataset = new DefaultValueDataset();
+    valueDataset.setValue(score);
+    MeterPlot meterPlot = new MeterPlot(valueDataset);
+    meterPlot.setRange(new Range(0, 100));
+    meterPlot.addInterval(new MeterInterval("Low", new Range(0, 0)));
+    meterPlot.addInterval(new MeterInterval("Moderate", new Range(50, 50)));
+    meterPlot.addInterval(new MeterInterval("High", new Range(100, 100)));
+    meterPlot.setNeedlePaint(Color.darkGray);
+    meterPlot.setDialBackgroundPaint(Color.CYAN);
+    meterPlot.setDialShape(DialShape.CHORD);
+    meterPlot.setMeterAngle(180);
+    meterPlot.setTickLabelFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12));
+    meterPlot.setUnits("%");
+    meterPlot.setTickPaint(Color.gray);
+    meterPlot.setValuePaint(Color.black);
+    meterPlot.setBackgroundPaint(Color.WHITE);
+
+    JFreeChart chart = new JFreeChart("", meterPlot);
+    chart.getLegend().visible = false;
+    chart.setBackgroundImage(null);
+    chart.setBackgroundPaint(Color.white);
+    return chart;
+
+  }
+
+  /*private JFreeChart createChart() {
+   *//*DefaultPieDataset dataSet = new DefaultPieDataset();
+    categories.forEach(category -> dataSet.setValue(category.getName(), category.getScore()));
+    dataSet.setValue("API Standard", 71);
+    dataSet.setValue("Ease of Use", 75);
+    dataSet.setValue("Security Standards", 50);
+    JFreeChart chart = ChartFactory.createRingChart("API Score", dataSet, true, true, false);
+    chart.getPlot().setBackgroundPaint(Color.WHITE);
+    RingPlot ringPlot = (RingPlot) chart.getPlot();
+    ringPlot.setSectionDepth(0.3D);
+    ringPlot.setSectionOutlinesVisible(false);
+    ringPlot.setSeparatorsVisible(false);
+    ringPlot.setLabelGenerator(new StandardPieSectionLabelGenerator("{2}"));
+    ringPlot.setLabelFont(new java.awt.Font("Helvetica", java.awt.Font.PLAIN, 12));
+    ringPlot.setShadowPaint(null);
+    ringPlot.setOutlinePaint(null);
+    chart.getLegend().setFrame(BlockBorder.NONE);
+    return chart;*//*
+
+    DefaultValueDataset valueDataset = new DefaultValueDataset();
+    valueDataset.setValue(71);
+    MeterPlot meterPlot = new MeterPlot(valueDataset);
+    meterPlot.setRange(new Range(0, 100));
+    meterPlot.addInterval(new MeterInterval("Low", new Range(0, 0)));
+    meterPlot.addInterval(new MeterInterval("Moderate", new Range(50, 50)));
+    meterPlot.addInterval(new MeterInterval("High", new Range(100, 100)));
+    meterPlot.setNeedlePaint(Color.darkGray);
+    meterPlot.setDialBackgroundPaint(Color.CYAN);
+    meterPlot.setDialShape(DialShape.CHORD);
+    meterPlot.setMeterAngle(180);
+    meterPlot.setTickLabelFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12));
+    meterPlot.setUnits("%");
+    meterPlot.setTickPaint(Color.gray);
+    meterPlot.setValuePaint(Color.black);
+    meterPlot.setBackgroundPaint(Color.WHITE);
+    //meterPlot.setOutlinePaint(Color.white);
+    //meterPlot.setOutlineStroke(null);
+    //meterPlot.setOutlineVisible(false);
+
+    JFreeChart chart = new JFreeChart("API Standard", meterPlot);
+    chart.getLegend().visible = false;
+    chart.setBackgroundImage(null);
+    chart.setBackgroundPaint(Color.white);
+    return chart;
+  }*/
+
+  private Image drawChart(PdfContentByte pdfContentByte, JFreeChart chart) {
+    float width = PageSize.A4.getWidth() * 3 / 4;
+    float height = PageSize.A4.getHeight() * 4 / 10;
+    PdfTemplate pdfTemplateChartHolder = pdfContentByte.createTemplate(width, height);
+    Graphics2D graphicsChart = pdfTemplateChartHolder.createGraphics(width, height, new DefaultFontMapper());
+    Rectangle2D chartRegion = new Rectangle2D.Double(0, 0, width, height);
+    chart.draw(graphicsChart, chartRegion);
+    graphicsChart.dispose();
+    return getImage(pdfTemplateChartHolder);
+  }
+
+  private Image getImage(PdfTemplate pdfTemplateChartHolder) {
+    try {
+      Image chartAsImage = Image.getInstance(pdfTemplateChartHolder);
+      chartAsImage.setAlignment(Element.ALIGN_CENTER);
+      return chartAsImage;
+    } catch (BadElementException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
   private void write() throws DocumentException {
     firstPage();
+    chartPage();
     for (int cIndex = 0; cIndex < categories.size(); cIndex++) {
       Phrase phrase;
       Category category = this.categories.get(cIndex);
