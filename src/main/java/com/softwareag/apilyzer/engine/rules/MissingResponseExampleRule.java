@@ -35,7 +35,6 @@ public class MissingResponseExampleRule extends MissingExampleRule {
               Operation operation = operationEntry.getValue();
               ApiResponses apiResponses = operation.getResponses();
               if (apiResponses != null) {
-                totalCount += 1;
                 Set<String> keySet = apiResponses.keySet();
                 for (String key : keySet) {
                   ApiResponse apiResponse = apiResponses.get(key);
@@ -43,6 +42,7 @@ public class MissingResponseExampleRule extends MissingExampleRule {
                   if (content != null) {
                     Set<String> contentkeys = content.keySet();
                     for (String contentkey : contentkeys) {
+                      totalCount += 1;
                       MediaType mediaType = content.get(contentkey);
                       Object example = mediaType.getExample();
                       if (example == null) {

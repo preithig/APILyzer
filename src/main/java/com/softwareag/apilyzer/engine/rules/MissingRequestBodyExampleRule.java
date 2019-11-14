@@ -34,16 +34,14 @@ public class MissingRequestBodyExampleRule extends MissingExampleRule {
               RequestBody requestBody = operation.getRequestBody();
 
               if (requestBody != null) {
-
-                totalCount += 1;
                 Content content = requestBody.getContent();
                 if (content != null) {
                   Set<String> contentkeys = content.keySet();
                   for (String contentkey : contentkeys) {
+                    totalCount += 1;
                     MediaType mediaType = content.get(contentkey);
                     Object example = mediaType.getExample();
                     if (example == null) {
-                      //path, operationentry.getkey, contentkey
                       Issue issue = createIssue(buildContext(path, operationEntry.getKey(), contentkey));
                       issue.setErrorInfo(" in request body of the path " + path + " for operation " + operationEntry.getKey());
                       issues.add(issue);
