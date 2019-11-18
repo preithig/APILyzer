@@ -152,7 +152,7 @@ public class APILyzerReport {
       table.getDefaultCell().setVerticalAlignment(Element.ALIGN_MIDDLE);
       table.getDefaultCell().setPaddingBottom(12f);
       table.setKeepTogether(true);
-      Font textFont = new Font(Font.FontFamily.HELVETICA, 15, Font.BOLD);
+      Font textFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
 
       for (Category category : categories) {
         JFreeChart chart = createChart(category.getScore());
@@ -161,7 +161,7 @@ public class APILyzerReport {
       }
 
       for (Category category : categories) {
-        table.addCell(new Phrase(category.getName(), textFont));
+        table.addCell(new Phrase(category.getName().replace("_"," "), textFont));
       }
 
       add(table);
@@ -180,7 +180,7 @@ public class APILyzerReport {
     meterPlot.addInterval(new MeterInterval("Moderate", new Range(50, 50)));
     meterPlot.addInterval(new MeterInterval("High", new Range(100, 100)));
     meterPlot.setNeedlePaint(Color.darkGray);
-    meterPlot.setDialBackgroundPaint(Color.CYAN);
+    meterPlot.setDialBackgroundPaint(Color.lightGray);
     meterPlot.setDialShape(DialShape.CHORD);
     meterPlot.setMeterAngle(180);
     meterPlot.setTickLabelFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12));
@@ -188,6 +188,7 @@ public class APILyzerReport {
     meterPlot.setTickPaint(Color.gray);
     meterPlot.setValuePaint(Color.black);
     meterPlot.setBackgroundPaint(Color.WHITE);
+    meterPlot.setValueFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 20));
 
     JFreeChart chart = new JFreeChart("", meterPlot);
     chart.getLegend().visible = false;
