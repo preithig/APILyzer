@@ -34,9 +34,9 @@ public class APILyzerReport {
   private ByteArrayOutputStream b;
   private PdfWriter writer;
   private static Font reportTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 23, Font.BOLD);
-  private static Font categoryFont = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
+  private static Font categoryFont = new Font(Font.FontFamily.TIMES_ROMAN, 11, Font.BOLD);
   private static Font fontBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
-  private static Font subCategoryFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC);
+  private static Font subCategoryFont = new Font(Font.FontFamily.TIMES_ROMAN, 11, Font.ITALIC);
   private EvaluationResult result;
   private List<Category> categories;
   private IssuesRepository issuesRepository;
@@ -269,6 +269,12 @@ public class APILyzerReport {
   private void write() throws DocumentException {
     firstPage();
     chartPage();
+    Paragraph paragraph = new Paragraph("ISSUES BY CATEGORY", fontBold);
+    paragraph.setSpacingBefore(8);
+    paragraph.setSpacingAfter(8);
+    doc.add(paragraph);
+    doc.add(new LineSeparator());
+    doc.add(Chunk.NEWLINE);
     for (int cIndex = 0; cIndex < categories.size(); cIndex++) {
       Phrase phrase;
       Category category = this.categories.get(cIndex);
